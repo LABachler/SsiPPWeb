@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modules>
+    <module id="1" name="DOS-LINE" comment="Dosline bla bla">
+        <param name="quantity" type="REAL" engineering_unit="kg" plc_name="P_QUANTITY" min_val="0" max_val="100" quantity_mult="1"/>
+        <report name="actual_quantity" type="REAL" engineering_unit="kg" plc_name="R_QUANTITY"/>
+    </module>
+    <module id="2" name="TEMP-CTRL" comment="Temperatursteuerung">
+        <param name="temp" type="REAL" engineering_unit="C" plc_name="P_TEMP" min_val="0" max_val="100" quantity_mult="0"/>
+        <param name="time" type="TIME" engineering_unit="TIME" plc_name="P_TIME" min_val="0" max_val="100" quantity_mult="0.3"/>
+        <report name="cur_temp" type="REAL" engineering_unit="C" plc_name="R_TEMP"/>
+    </module>
+</modules>
