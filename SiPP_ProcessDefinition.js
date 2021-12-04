@@ -31,32 +31,8 @@ function loadDoc() {
     };
 
 }
-//toggle sidebar function
-$(document).ready(function () {
-    $('#homeSubmenu').on('click', function () {
-        $('#data-toggle').toggleClass('active');
-    });
-});
-
-function xmlFunction(xml) {
-    let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(xml, "text/xml");
-    let processName = xmlDoc.getElementsByTagName("process"); //array of all processes
-    let processModules = xmlDoc.getElementsByTagName("module_instance"); // array of all module instances
-    let processList = document.getElementById("pageSubmenu");  //list of all saved processes
-
-    //console.log(processName.getAttribute("name"));
-    for(let process of processName){
-        let listItem = document.createElement("li");
-        let paramItem = document.createElement("a");
-        paramItem.setAttribute("href", "#");
-        let paramText = document.createTextNode(process.getAttribute("name"));
-        paramItem.appendChild(paramText);
-        listItem.appendChild(paramItem);
-        processList.appendChild(listItem);
-    }
-
-    for (let elem of processModules) {
+function readData(processName){
+    for (let elem of processName) {
 
         //Main Table
         let tblHistoryData = document.getElementById("tblHistoryData");
@@ -81,13 +57,39 @@ function xmlFunction(xml) {
             subRow = subTable.insertRow(-1);
             subRow.insertCell(-1).innerHTML = param.textContent;
             subRow.insertCell(-1).innerHTML = param.getAttribute('engineering_unit');
-           // subRow.insertCell(-1);
+            // subRow.insertCell(-1);
             subRow = subTable.insertRow(-1);
             let cell = document.createElement("td");
             cell.appendChild(subTable);
             row.appendChild(cell);
 
         }
+    }
+
+}
+function xmlFunction(xml) {
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(xml, "text/xml");
+    let processName = xmlDoc.getElementsByTagName("process"); //array of all processes
+    let processModules;// = xmlDoc.getElementsByTagName("module_instance"); // array of all module instances
+    let processList = document.getElementById("pageSubmenu");  //list of all saved processes
+    let chosenProcess;
+    //console.log(processName.getAttribute("name"));
+    for(let process of processName){
+        let listItem = document.createElement("li");
+        let aItem = document.createElement("a");
+        aItem.setAttribute("href", "#");
+        aItem.setAttribute("id", process.getAttribute("name"));
+        aItem.addEventListener("click", function (){
+            chosenProcess = process.getAttribute("name");
+            processModules = process.getElementsByTagName("module_instance")
+            readData(processModules);
+        })
+
+        let paramText = document.createTextNode(process.getAttribute("name"));
+        aItem.appendChild(paramText);
+        listItem.appendChild(aItem);
+        processList.appendChild(listItem);
     }
 }
 loadDoc();
