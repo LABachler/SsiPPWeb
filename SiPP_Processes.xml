@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<processes>
+    <process  id="1" name="Kuerbiskernbrot" default_quantity="100kg" multiplier="">
+        <paralell>
+            <module_instance type="DOS-LINE-WATER" plc="192.168.1.1" datablock_name="DB-1" line_id="1">
+                <module_instance_report>
+                    <time_started>00:40</time_started>
+                    <time_finished>00:42</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht Water</message>
+                    <error>Und ich ein Error Water</error>
+                </module_instance_report>
+                <param name="quantity" engineering_unit="Kg">120</param>
+                <report name="actual_quantity">123</report>
+            </module_instance>
+            <module_instance type="DOS-LINE-CLAY" plc="192.168.1.1" datablock_name="DB-2" line_id="1">
+                <module_instance_report>
+                    <time_started>00:40</time_started>
+                    <time_finished>00:50</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht Clay</message>
+                    <error>Und ich ein Error Water</error>
+                </module_instance_report>
+                <param name="quantity" engineering_unit="Kg">200</param>
+                <report name="actual_quantity">198</report>
+            </module_instance>
+            <module_instance type="DOS-LINE-SPICES" plc="192.168.1.1" datablock_name="DB-3" line_id="1">
+                <module_instance_report>
+                    <time_started>00:40</time_started>
+                    <time_finished>00:43</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht Spices</message>
+                    <error>Und ich ein Error Spices</error>
+                </module_instance_report>
+                <param name="quantity">2</param>
+                <report name="actual_quantity">3</report>
+            </module_instance>
+        </paralell>
+        <paralell>
+            <module_instance type="TEMP-CTRL-KNEAD" plc="192.168.1.4" datablock_name="DB-7" line_id="1">
+                <module_instance_report>
+                    <time_started>02:35</time_started>
+                    <time_finished>03:05</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht KneadTemp</message>
+                    <error>Und ich ein Error KneadTemp</error>
+                </module_instance_report>
+                <param name="temp" engineering_unit="C">33</param>
+                <param name="time" engineering_unit="Min">30</param>
+                <report name="cur_time">30</report>
+            </module_instance>
+            <module_instance type="KNEAD-CTRL" plc="192.168.1.4" datablock_name="DB-8" line_id="1">
+                <module_instance_report>
+                    <time_started>02:36</time_started>
+                    <time_finished>03:01</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht KneadCtrl</message>
+                    <error>Und ich ein Error KneadCtrl</error>
+                </module_instance_report>
+                <param name="knead_rpm" engineering_unit="rpm">2000</param>
+                <param name="time" engineering_unit="Min">25</param>
+                <report name="cur_rpm">0</report>
+                <report name="cur_time">25</report>
+            </module_instance>
+        </paralell>
+        <paralell>
+            <module_instance type="TEMP-CTRL-KNEAD" plc="192.168.1.4" datablock_name="DB-7" line_id="1">
+                <module_instance_report>
+                    <time_started>03:30</time_started>
+                    <time_finished>04:01</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht KneadTemp2</message>
+                    <error>Und ich ein Error KneadTemp2</error>
+                </module_instance_report>
+                <param name="temp" engineering_unit="C">33</param>
+                <param name="time" engineering_unit="Min">30</param>
+                <report name="cur_time">30</report>
+            </module_instance>
+            <module_instance type="KNEAD-CTRL" plc="192.168.1.4" datablock_name="DB-8" line_id="1">
+                <module_instance_report>
+                    <time_started>03:30</time_started>
+                    <time_finished>03:55</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht KneadCtrl2</message>
+                    <error>Und ich ein Error KneadCtrl2</error>
+                </module_instance_report>
+                <param name="knead_rpm" engineering_unit="rpm">2000</param>
+                <param name="time" engineering_unit="Min">25</param>
+                <report name="cur_rpm">0</report>
+                <report name="cur_time">25</report>
+            </module_instance>
+            <module_instance type="DOS-LINE-KNEAD" plc="192.168.1.4" datablock_name="DB-3" line_id="1">
+                <module_instance_report>
+                    <time_started>03:35</time_started>
+                    <time_finished>03:45</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht KneadDos</message>
+                    <error>Und ich ein Error KneadDos</error>
+                </module_instance_report>
+                <param name="quantity" engineering_unit="Kg">25</param>
+                <report name="actual_quantity">24</report>
+            </module_instance>
+        </paralell>
+        <module_instance type="TEMP-CTRL-RISE" plc="192.168.1.3" datablock_name="DB-5" line_id="1">
+            <module_instance_report>
+                <time_started>04:10</time_started>
+                <time_finished>05:15</time_finished>
+                <status>Finished</status>
+                <message>Hallo, ich bin Nachricht RiseTemp</message>
+                <error>Und ich ein Error RiseTemp</error>
+            </module_instance_report>
+            <param name="temp" engineering_unit="C">35</param>
+            <param name="time" engineering_unit="Min">75</param>
+            <report name="cur_time">75</report>
+        </module_instance>
+        <module_instance type="APPORTION-CTRL" plc="192.168.1.2" datablock_name="DB-10" line_id="1">
+            <module_instance_report>
+                <time_started>05:20</time_started>
+                <time_finished>05:50</time_finished>
+                <status>Finished</status>
+                <message>Hallo, ich bin Nachricht Apportion</message>
+                <error>Und ich ein Error Apportion</error>
+            </module_instance_report>
+            <param name="apportion" engineering_unit="no unit">2</param>
+            <report name="cur_apportion">100</report>
+        </module_instance>
+        <paralell>
+            <module_instance type="TEMP-CTRL-OVEN" plc="192.168.1.3" datablock_name="DB-4" line_id="1">
+                <module_instance_report>
+                    <time_started>06:00</time_started>
+                    <time_finished>07:15</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht OvenTemp</message>
+                    <error>Und ich ein Error OvenTemp</error>
+                </module_instance_report>
+                <param name="temp" engineering_unit="C">180</param>
+                <param name="time" engineering_unit="Min">75</param>
+                <report name="cur_time">75</report>
+            </module_instance>
+            <module_instance type="BAKE-CTRL" plc="192.168.1.3" datablock_name="DB-9" line_id="1">
+                <module_instance_report>
+                    <time_started>06:10</time_started>
+                    <time_finished>06:30</time_finished>
+                    <status>Finished</status>
+                    <message>Hallo, ich bin Nachricht Bake</message>
+                    <error>Und ich ein Error Bake</error>
+                </module_instance_report>
+                <param name="setting">Umluft</param>
+                <report name="time">80</report>
+            </module_instance>
+        </paralell>
+        <module_instance type="FREEZE-CTRL" plc="192.168.1.2" datablock_name="DB-10" line_id="1">
+            <module_instance_report>
+                <time_started>07:00</time_started>
+                <time_finished></time_finished>
+                <status>Running</status>
+                <message>Hallo, ich bin Nachricht Freeze</message>
+                <error>Und ich ein Error Freeze</error>
+            </module_instance_report>
+            <param name="temp" engineering_unit="C">-20</param>
+            <param name="time" engineering_unit="Min">30</param>
+            <report name="cur_time">28</report>
+        </module_instance>
+    </process>
+</processes>
