@@ -183,21 +183,17 @@ a.article:hover {
     margin-left:auto;
     margin-right:auto;
     height: fit-content;
-    width: 50%;
-    min-width: 250px;
-    max-width: 250px;
-    background: #7386D5;
+    text-align: center;
+    background: #a8acb7;
     color: #fff;
     transition: all 0.3s;
     border-radius: 15px;
-    border-color: white;
 }
 
-tbody, td, tfoot, th, thead, tr {
-    border-color: inherit;
+ tbody, td, tfoot, th, thead, tr {
+     width: 100%;
+    border-color: #a8acb7;
     border-style: solid;
     border-width: 1px;
-    border-left: none;
-    border-top: none;
-    border-right: none;
+    vertical-align: center;
 }

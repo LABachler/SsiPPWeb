@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <processes>
     <process  id="1" name="Kuerbiskernbrot" default_quantity="100kg" multiplier="">
-        <paralell>
+        <parallel>
             <module_instance type="DOS-LINE-WATER" plc="192.168.1.1" datablock_name="DB-1" line_id="1">
                 <module_instance_report>
                     <time_started>00:40</time_started>
@@ -32,11 +32,11 @@
                     <message>Hallo, ich bin Nachricht Spices</message>
                     <error>Und ich ein Error Spices</error>
                 </module_instance_report>
-                <param name="quantity">2</param>
+                <param name="quantity" engineering_unit="gr">2</param>
                 <report name="actual_quantity">3</report>
             </module_instance>
-        </paralell>
-        <paralell>
+        </parallel>
+        <parallel>
             <module_instance type="TEMP-CTRL-KNEAD" plc="192.168.1.4" datablock_name="DB-7" line_id="1">
                 <module_instance_report>
                     <time_started>02:35</time_started>
@@ -51,7 +51,7 @@
             </module_instance>
             <module_instance type="KNEAD-CTRL" plc="192.168.1.4" datablock_name="DB-8" line_id="1">
                 <module_instance_report>
-                    <time_started>02:36</time_started>
+                    <time_started>02:35</time_started>
                     <time_finished>03:01</time_finished>
                     <status>Finished</status>
                     <message>Hallo, ich bin Nachricht KneadCtrl</message>
@@ -62,11 +62,11 @@
                 <report name="cur_rpm">0</report>
                 <report name="cur_time">25</report>
             </module_instance>
-        </paralell>
-        <paralell>
+        </parallel>
+        <parallel>
             <module_instance type="TEMP-CTRL-KNEAD" plc="192.168.1.4" datablock_name="DB-7" line_id="1">
                 <module_instance_report>
-                    <time_started>03:30</time_started>
+                    <time_started>03:35</time_started>
                     <time_finished>04:01</time_finished>
                     <status>Finished</status>
                     <message>Hallo, ich bin Nachricht KneadTemp2</message>
@@ -78,7 +78,7 @@
             </module_instance>
             <module_instance type="KNEAD-CTRL" plc="192.168.1.4" datablock_name="DB-8" line_id="1">
                 <module_instance_report>
-                    <time_started>03:30</time_started>
+                    <time_started>03:35</time_started>
                     <time_finished>03:55</time_finished>
                     <status>Finished</status>
                     <message>Hallo, ich bin Nachricht KneadCtrl2</message>
@@ -100,7 +100,7 @@
                 <param name="quantity" engineering_unit="Kg">25</param>
                 <report name="actual_quantity">24</report>
             </module_instance>
-        </paralell>
+        </parallel>
         <module_instance type="TEMP-CTRL-RISE" plc="192.168.1.3" datablock_name="DB-5" line_id="1">
             <module_instance_report>
                 <time_started>04:10</time_started>
@@ -121,13 +121,13 @@
                 <message>Hallo, ich bin Nachricht Apportion</message>
                 <error>Und ich ein Error Apportion</error>
             </module_instance_report>
-            <param name="apportion" engineering_unit="no unit">2</param>
+            <param name="apportion" engineering_unit="pcs">2</param>
             <report name="cur_apportion">100</report>
         </module_instance>
-        <paralell>
+        <parallel>
             <module_instance type="TEMP-CTRL-OVEN" plc="192.168.1.3" datablock_name="DB-4" line_id="1">
                 <module_instance_report>
-                    <time_started>06:00</time_started>
+                    <time_started>06:10</time_started>
                     <time_finished>07:15</time_finished>
                     <status>Finished</status>
                     <message>Hallo, ich bin Nachricht OvenTemp</message>
@@ -148,7 +148,7 @@
                 <param name="setting">Umluft</param>
                 <report name="time">80</report>
             </module_instance>
-        </paralell>
+        </parallel>
         <module_instance type="FREEZE-CTRL" plc="192.168.1.2" datablock_name="DB-10" line_id="1">
             <module_instance_report>
                 <time_started>07:00</time_started>

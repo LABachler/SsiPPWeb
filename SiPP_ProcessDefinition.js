@@ -1,26 +1,8 @@
 
-/*const xml2js = require('xml2js');
-const fs = require('fs');
-const parser = new xml2js.Parser({ attrkey: "ATTR" });
-
-// this example reads the file synchronously
-// you can read it asynchronously also
-let xml_string = fs.readFileSync("SiPP_modules.xml", "utf8");
-
-parser.parseString(xml_string, function(error, result) {
-    if(error === null) {
-        console.log(result);
-        console.log("helouuuuuuuuu");
-    }
-    else {
-        console.log(error);
-    }
-});
-*/
-var xmlFile = 'SiPP_Processes.xml';
+let xmlFile = 'SiPP_Processes.xml';
 
 function loadDoc() {
-    var xhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
 
     xhttp.open("GET", xmlFile, true);
     xhttp.send();
@@ -31,39 +13,65 @@ function loadDoc() {
     };
 
 }
-function readData(processName){
+function readData(process, processName, processTimes){
+    //Main Table
+    let tblHistoryData = document.getElementById("tblHistoryData");
+    let row = tblHistoryData.insertRow(-1);
+    let header = document.getElementById("processName");
+    header.style.cssText ='background-color: white; border-radius:10px'
+    header.innerHTML = process;
+
+    let nextRow;
+    let lastProcessTime = "0";
+    let i = 0;
+    let rowNum = 1;
+
+
     for (let elem of processName) {
 
-        //Main Table
-        let tblHistoryData = document.getElementById("tblHistoryData");
-        let row = tblHistoryData.insertRow(-1);
-
-
-
+        //check if processes are not running parallel
+        if(lastProcessTime !== processTimes[i].textContent){
+            row = tblHistoryData.insertRow(-1);
+            nextRow = tblHistoryData.insertRow(-1);
+            row.insertCell(-1).innerHTML = rowNum.toString();
+            rowNum++; // row numbers for processes
+            nextRow.insertCell(-1).innerHTML = "";
+        }
 
         //inserting values in the tables
-        row.insertCell(-1).innerHTML = tblHistoryData.rows.length.toString();
+
         row.insertCell(-1).innerHTML = elem.getAttribute('type');
 
         let parameters = elem.getElementsByTagName("param");
-
+        let paramNr = 0;
         for (let param of parameters){
             //Sub Table
             let subTable = document.createElement("table");
             let subRow = subTable.insertRow(-1);
-            subTable.setAttribute("class", "parameters")
+            subTable.style.cssText = 'background-color: white; border-collapse: collapse; border-color: white; table-layout: fixed'
+
             subRow.insertCell(-1).innerHTML = param.getAttribute('name');
             subRow.insertCell(-1);
             subRow = subTable.insertRow(-1);
             subRow.insertCell(-1).innerHTML = param.textContent;
             subRow.insertCell(-1).innerHTML = param.getAttribute('engineering_unit');
-            // subRow.insertCell(-1);
             subRow = subTable.insertRow(-1);
+
             let cell = document.createElement("td");
             cell.appendChild(subTable);
-            row.appendChild(cell);
+            cell.style.cssText = ' background-color: #a8acb7; width: 100%; color: blue; border: #7386D5; table-layout: fixed'
+            if(paramNr > 0){
+                row.insertCell(-1).innerHTML = "";
+            }
+
+            nextRow.appendChild(cell);
+            paramNr++;
 
         }
+        lastProcessTime = processTimes[i].textContent; // save current time-started to check
+                                                       // if next process runns parallel with this one
+
+        i++;
     }
 
 }
@@ -71,19 +79,18 @@ function xmlFunction(xml) {
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(xml, "text/xml");
     let processName = xmlDoc.getElementsByTagName("process"); //array of all processes
-    let processModules;// = xmlDoc.getElementsByTagName("module_instance"); // array of all module instances
     let processList = document.getElementById("pageSubmenu");  //list of all saved processes
-    let chosenProcess;
     //console.log(processName.getAttribute("name"));
     for(let process of processName){
         let listItem = document.createElement("li");
         let aItem = document.createElement("a");
         aItem.setAttribute("href", "#");
         aItem.setAttribute("id", process.getAttribute("name"));
+
         aItem.addEventListener("click", function (){
-            chosenProcess = process.getAttribute("name");
-            processModules = process.getElementsByTagName("module_instance")
-            readData(processModules);
+            let processModules = process.getElementsByTagName("module_instance");
+            let processTimes = process.getElementsByTagName("time_started");
+            readData(process.getAttribute("name"),processModules, processTimes);
         })
 
         let paramText = document.createTextNode(process.getAttribute("name"));
