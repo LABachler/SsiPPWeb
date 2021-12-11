@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modules>
-    <module id="1" name="DOS-LINE" comment="Dosline bla bla">
-        <param name="quantity" type="REAL" engineering_unit="kg" plc_name="P_QUANTITY" min_val="0" max_val="100" quantity_mult="1"/>
-        <report name="actual_quantity" type="REAL" engineering_unit="kg" plc_name="R_QUANTITY"/>
+    <module id="1" name="DOS-LINE" comment="DOS-Line bla">
+        <param name="quantity" type="REAL" engineering_unit="kg" plc_name="P_QUANTITY" min_val="0" max_val="100" quantity_mult="1"></param>
+        <report name="actual_quantity" type="REAL" engineering_unit="kg" plc_name="R_QUANTITY"></report>
     </module>
     <module id="2" name="TEMP-CTRL" comment="Temperatursteuerung">
-        <param name="temp" type="REAL" engineering_unit="C" plc_name="P_TEMP" min_val="0" max_val="100" quantity_mult="0"/>
-        <param name="time" type="TIME" engineering_unit="TIME" plc_name="P_TIME" min_val="0" max_val="100" quantity_mult="0.3"/>
-        <report name="cur_temp" type="REAL" engineering_unit="C" plc_name="R_TEMP"/>
+        <param name="temp" type="REAL" engineering_unit="C" plc_name="P_TEMP" min_val="0" max_val="100" quantity_mult="0"></param>
+        <param name="time" type="TIME" engineering_unit="TIME" plc_name="P_TIME" min_val="0" max_val="100" quantity_mult="0.3"></param>
+        <report name="cur_temp" type="REAL" engineering_unit="C" plc_name="R_TEMP"></report>
+    </module>
+    <module id="3" name="KNEAD-CTRL" comment="Knetsteuerung">
+        <param name="knead_rpm" type="INT" engineering_unit="RPM" plc_name="P_KNEAD" min_val="0" max_val="6000"></param>
+        <param name="time" type="TIME" engineering_unit="TIME" plc_name="P_TIME" min_val="0" max_val="100"></param>
+        <report name="cur_rpm" type="INT" engineering_unit="RPM" plc_name="R_KNEAD"></report>
+        <report name="cur_time" type="TIME" engineering_unit="TIME" plc_name="R_TIME"></report>
+    </module>
+    <module id="4" name="BAKE-CTRL" comment="Backofensteuerung">
+        <param name="setting" type="ENUM" engineering_unit="SETTING" plc_name="P_SETTING"></param>
+        <param name="time" type="TIME" engineering_unit="TIME" plc_name="P_TIME" min_val="0" max_val="100"></param>
+        <report name="cur_time" type="TIME" engineering_unit="TIME" plc_name="R_BAKE"></report>
+    </module>
+    <module id="5" name="APPORTION-CTRL" comment="Portioniersteuerung">
+        <param name="apportion" type="REAL" engineering_unit="kg" plc_name="P_APPORTION" min_val="0" max_val="100"></param>
+        <report name="cur_apportion" type="REAL" engineering_unit="pieces" plc_name="R_APPORTION"></report>
     </module>
 </modules>

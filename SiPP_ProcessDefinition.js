@@ -16,10 +16,11 @@ function loadDoc() {
 function readData(process, processName, processTimes){
     //Main Table
     let tblHistoryData = document.getElementById("tblHistoryData");
+    tblHistoryData.innerHTML="";
     let row = tblHistoryData.insertRow(-1);
     let header = document.getElementById("processName");
     header.style.cssText ='background-color: white; border-radius:10px'
-    header.innerHTML = process;
+    header.innerHTML = process.getAttribute("name")+ '-' + process.getAttribute("default_quantity");
 
     let nextRow;
     let lastProcessTime = "0";
@@ -48,10 +49,9 @@ function readData(process, processName, processTimes){
             //Sub Table
             let subTable = document.createElement("table");
             let subRow = subTable.insertRow(-1);
-            subTable.style.cssText = 'background-color: white; border-collapse: collapse; border-color: white; table-layout: fixed'
-
+            subTable.style.cssText = 'background-color: white; border-color: white'
             subRow.insertCell(-1).innerHTML = param.getAttribute('name');
-            subRow.insertCell(-1);
+            subRow.insertCell(-1).innerHTML = "Unit";
             subRow = subTable.insertRow(-1);
             subRow.insertCell(-1).innerHTML = param.textContent;
             subRow.insertCell(-1).innerHTML = param.getAttribute('engineering_unit');
@@ -90,7 +90,7 @@ function xmlFunction(xml) {
         aItem.addEventListener("click", function (){
             let processModules = process.getElementsByTagName("module_instance");
             let processTimes = process.getElementsByTagName("time_started");
-            readData(process.getAttribute("name"),processModules, processTimes);
+            readData(process,processModules, processTimes);
         })
 
         let paramText = document.createTextNode(process.getAttribute("name"));
