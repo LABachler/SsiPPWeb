@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module_instances>
+    <module_instance type="DOS-LINE" plc="192.168.1.1" name="DOS-LINE-WATER" datablock_name="DB-1" line_id="1"/>
+    <module_instance type="DOS-LINE" plc="192.168.1.1" name="DOS-LINE-CLAY" datablock_name="DB-2" line_id="1"/>
+    <module_instance type="DOS-LINE" plc="192.168.1.1" name="DOS-LINE-SPICES" datablock_name="DB-3" line_id="1"/>
+    <module_instance type="TEMP-CTRL" plc="192.168.1.3" name="TEMP-CTRL-OVEN" datablock_name="DB-4" line_id="1"/>
+    <module_instance type="TEMP-CTRL" plc="192.168.1.3" name="TEMP-CTRL-RISE" datablock_name="DB-5" line_id="1"/>
+    <module_instance type="TEMP-CTRL" plc="192.168.1.6" name="TEMP-CTRL-FREEZE" datablock_name="DB-6" line_id="1"/>
+    <module_instance type="TEMP-CTRL" plc="192.168.1.4" name="TEMP-CTRL-KNEAD" datablock_name="DB-7" line_id="1"/>
+    <module_instance type="KNEAD-CTRL" plc="192.168.1.4" name="KNEAD-CTRL" datablock_name="DB-8" line_id="1"/>
+    <module_instance type="DOS-LINE" plc="192.168.1.4" name="DOS-LINE-KNEAD" datablock_name="DB-3" line_id="1"/>
+    <module_instance type="BAKE-CTRL" plc="192.168.1.3" name="BAKE-CTRL" datablock_name="DB-9" line_id="1"/>
+    <module_instance type="APPORTION-CTRL" plc="192.168.1.2" name="APPORTION-CTRL" datablock_name="DB-10" line_id="1"/>
+</module_instances>
