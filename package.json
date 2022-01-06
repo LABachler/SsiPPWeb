@@ -1,16 +1,7 @@
 {
-  "name": "diplomarbeit",
+  "name": "untitled1",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "jquery": "^3.6.0",
-    "xml2js": "^0.4.23"
+  "dependencies": {
+    "redis": "^4.0.1"
   }
 }
