@@ -24,9 +24,9 @@ export let xmlModules = "<modules>\n" +
     "    </module>\n" +
     "    <module id=\"3\" name=\"KNEAD-CTRL\" comment=\"Knetsteuerung\">\n" +
     "        <param name=\"knead_rpm\" type=\"INT\" engineering_unit=\"RPM\" plc_name=\"P_KNEAD\" min_val=\"0\" max_val=\"6000\"></param>\n" +
-    "        <param name=\"time\" type=\"TIME\" engineering_unit=\"TIME\" plc_name=\"P_TIME\" min_val=\"0\" max_val=\"100\"></param>\n" +
+    "        <param name=\"time\" type=\"TIME\" engineering_unit=\"Min\" plc_name=\"P_TIME\" min_val=\"0\" max_val=\"100\"></param>\n" +
     "        <report name=\"cur_rpm\" type=\"INT\" engineering_unit=\"RPM\" plc_name=\"R_KNEAD\"></report>\n" +
-    "        <report name=\"cur_time\" type=\"TIME\" engineering_unit=\"TIME\" plc_name=\"R_TIME\"></report>\n" +
+    "        <report name=\"cur_time\" type=\"TIME\" engineering_unit=\"Min\" plc_name=\"R_TIME\"></report>\n" +
     "    </module>\n" +
     "    <module id=\"4\" name=\"BAKE-CTRL\" comment=\"Backofensteuerung\">\n" +
     "        <param name=\"setting\" type=\"ENUM\" engineering_unit=\"SETTING\" plc_name=\"P_SETTING\"></param>\n" +
@@ -42,6 +42,7 @@ export let xmlModules = "<modules>\n" +
 export let xmlProcesses = "<processes>\n" +
     "    <process  id=\"1\" name=\"Kuerbiskernbrot\" default_quantity=\"100kg\" multiplier=\"\">\n" +
     "        <parallel>\n" +
+    "        <subParallel>\n" +
     "            <module_instance type=\"DOS-LINE-WATER\" plc=\"192.168.1.1\" datablock_name=\"DB-1\" line_id=\"1\">\n" +
     "                <module_instance_report>\n" +
     "                    <time_started>00:40</time_started>\n" +
@@ -50,9 +51,21 @@ export let xmlProcesses = "<processes>\n" +
     "                    <message>Water is filled</message>\n" +
     "                    <error>Error water valve not working</error>\n" +
     "                </module_instance_report>\n" +
-    "                <param name=\"exp_quantity\" engineering_unit=\"l\">120</param>\n" +
+    "                <param name=\"exp_quantity\" engineering_unit=\"l\">15000</param>\n" +
     "                <report name=\"actual_quantity\">120.23</report>\n" +
     "            </module_instance>\n" +
+    "            <module_instance type=\"DOS-LINE-MILK\" plc=\"192.168.1.1\" datablock_name=\"DB-1\" line_id=\"1\">\n" +
+    "                <module_instance_report>\n" +
+    "                    <time_started>00:40</time_started>\n" +
+    "                    <time_finished>00:42</time_finished>\n" +
+    "                    <status>Finished</status>\n" +
+    "                    <message>Water is filled</message>\n" +
+    "                    <error>Error water valve not working</error>\n" +
+    "                </module_instance_report>\n" +
+    "                <param name=\"exp_quantity\" engineering_unit=\"l\">1290000</param>\n" +
+    "                <report name=\"actual_quantity\">170.00</report>\n" +
+    "            </module_instance>\n" +
+    "        </subParallel>\n" +
     "            <module_instance type=\"DOS-LINE-CLAY\" plc=\"192.168.1.1\" datablock_name=\"DB-2\" line_id=\"1\">\n" +
     "                <module_instance_report>\n" +
     "                    <time_started>00:40</time_started>\n" +
