@@ -1,17 +1,21 @@
 
 .fieldset {
   padding:10px;
-  border:3px solid #ffffff;
+  border:3px solid #b6b6b9;
   background:#383535;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   box-shadow: 10px 10px rgba(0,0,0,.15);
 }
 
 .divMain {
-  display:inline-block;
+  display: grid;
   color: white;
-  grid-template-columns: 1fr 0.2fr;
-  grid-template-rows: 0.2fr;
+  grid-template-columns:0.2fr 1fr ;
+  grid-template-rows: 3em;
   gap: 2px 2px;
+  min-width: 0;
+  min-height: 0
 }
 
 .pNameInput {
@@ -22,7 +26,8 @@
 .moduleAttInp {
   border-radius:10px;
   margin-left: 10px;
-  color:white
+  color:white;
+  box-shadow: 10px 10px rgba(0,0,0,.15);
 }
 
 .moduleListItem {
@@ -30,7 +35,7 @@
 }
 
 .moduleListItemName {
-  font-family: "Lucida Console","Courier New", monospace
+  font-family: "Lucida Console","Courier New", monospace;
 }
 
 .moduleInfoPopUp {

@@ -159,7 +159,7 @@ a:focus {
 
 #sidebar ul li.active>a,
 a[aria-bs-expanded="true"] {
-    color: #ffffff;
+    color: #383535;
 }
 
 a[data-toggle="collapse"] {

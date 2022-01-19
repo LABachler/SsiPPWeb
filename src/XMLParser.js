@@ -2,7 +2,11 @@
 */
 import * as XMLFiles from './XMLFiles.js';
 let xPath;
-
+$(document).ready(function () {
+    $('#sidebarCollapse').on('click', function () {
+        $('#sidebar').toggleClass('active');
+    });
+});
 /**
  * universal xmlParser
  * returns parsed xml text

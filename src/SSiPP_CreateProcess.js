@@ -123,7 +123,7 @@ let moduleNames = XMLParser.getAllModuleInstanceNames();
 let selectModules = document.createElement("select");
 
 selectWrapper.id = 'selWrapper';
-selectWrapper.className = 'buttons';
+selectWrapper.className = 'selWrapper';
 selectModules.name = "selectModules";
 selectModules.id = "selectModules";
 
@@ -137,6 +137,18 @@ menuItemCreateNewProcess.addEventListener("click", function() {
     $('label').show();
     $('#tablePosition').hide();
     $('#tablePositionCreateProcess').show();
+
+    let btnHideSidebar = document.createElement('button');
+    btnHideSidebar.innerHTML = '☰';
+    btnHideSidebar.className = 'buttons';
+    btnHideSidebar.id = 'sidebarCollapse';
+
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+    divMain.appendChild(btnHideSidebar);
 
     //add items to a menu
     let menuSelHeader = document.createElement("option");

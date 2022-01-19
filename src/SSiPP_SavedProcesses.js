@@ -38,8 +38,20 @@ function showData(processName){
     $('#tablePosition').show();
     $('#tablePositionCreateProcess').hide();
 
+    let btnHideSidebarSP = document.createElement('button');
+    btnHideSidebarSP.innerHTML = '☰';
+    btnHideSidebarSP.className = 'buttons';
+    btnHideSidebarSP.id = 'sidebarCollapseBtn';
+
+    $(document).ready(function () {
+        $('#sidebarCollapseBtn').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+    });
+
+
     let header = document.createElement('button');
-    header.className = "buttons";
+    header.className = "buttonStartProcess";
     header.innerHTML = " START " + processName + " process";
 
     let divGrid = document.getElementById('tablePosition');
@@ -47,6 +59,7 @@ function showData(processName){
 
     let dataTable = document.createElement('table');
     dataTable.className = "dataTable";
+    divGrid.appendChild(btnHideSidebarSP);
 
     let startRow = dataTable.insertRow(-1);
     let startCell = startRow.insertCell(-1);

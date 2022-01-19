@@ -2,19 +2,23 @@
     color:white;
     font-family: "Lucida Console", "Courier New", monospace;
 }
-.buttons {
+.buttons, .selWrapper, .buttonStartProcess {
     padding-left: 40px;
     padding-right: 40px;
     background-color: rgba(255, 255, 255, 0);
     color:white;
     height:40px;
-    width: 100%;
     font-size: 24px;
     border-bottom-right-radius: 30px;
     border-top-left-radius: 30px;
     box-shadow: rgb(255, 255, 255) 0px 50px 100px -20px, rgb(100, 97, 97) 0px 30px 60px -30px, rgba(255, 255, 255, 0.35) 0px -2px 6px 0px inset;
 }
-
+.buttonStartProcess {
+    width: 80%;
+}
+.selWrapper {
+    width: 100%;
+}
 .dataTable {
     text-align: center;
     border: 1px solid transparent;
