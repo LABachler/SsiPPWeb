@@ -39,15 +39,32 @@ html,body,svg {
     }
 }
 @keyframes stroke-color {
-    0%      {stroke: hsl(232, 82%, 15%);}
+    0%      {stroke: hsl(0, 100%, 17%);}
     16.667% {stroke: hsl(130, 94%, 14%);}
     33.333% {stroke: hsl(46, 94%, 49%);}
     50%     {stroke: hsl(0, 3%, 21%);}
-    66.667% {stroke: hsl(0, 0%, 0%);}
-    83.333% {stroke: hsl(300, 100%, 6%);}
+    66.667% {stroke: hsl(0, 2%, 39%);}
+    83.333% {stroke: hsl(130, 94%, 14%);}
     100%    {stroke: hsl(0, 0%, 100%);}
 }
 
+.backgroundNLB {
+    font-size: 100px;
+    border-bottom: 1px solid whitesmoke;
+    position: center;
+    horiz-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: rgba(79, 80, 80, 0.62);
+    text-align: center;
+}
+.backgroundWMP {
+    font-size: 50px;
+    position: center;
+    horiz-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: rgba(79, 80, 80, 0.62);
+    text-align: center;
+}
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
@@ -64,21 +81,7 @@ a:focus {
     transition: all 0.3s;
 }
 
-.navbar {
-    padding: 15px 10px;
-    background: #656c80;
-    border: none;
-    border-radius: 0;
-    margin-bottom: 40px;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 
-}
-
-.navbar-btn {
-    box-shadow: none;
-    outline: none !important;
-    border: none;
-}
 
 .line {
     width: 100%;
@@ -191,9 +194,6 @@ ul.CTAs a {
     border-radius: 5px;
     margin-bottom: 5px;
 }
-/* ---------------------------------------------------
-    CONTENT STYLE
------------------------------------------------------ */
 
 #content {
     width: 100%;
