@@ -43,76 +43,79 @@ addButton.className = "buttons";
 
 addButton.addEventListener('click', function () {
 
-    let moduleType = XMLParser.getModuleByModuleInstanceName(selectModules.options[selectModules.selectedIndex].text).stringValue;
-    let moduleParams = XMLParser.getModuleParamsByModuleName(moduleType);
-    let fieldsetModule = document.createElement("fieldset");
-    let legendModule = document.createElement("legend");
-    let pBreakLine = document.createElement("p");
-    let legendModuleStep = document.createElement("legend");
-    let spnModuleAttribute;
-    let lblModuleAttribute;
-    let inpModuleAttribute;
+    if(selectModules.options[selectModules.selectedIndex].text !== "Choose a process ▼") {
 
-    let param = null;
+        let moduleType = XMLParser.getModuleByModuleInstanceName(selectModules.options[selectModules.selectedIndex].text).stringValue;
+        let moduleParams = XMLParser.getModuleParamsByModuleName(moduleType);
+        let fieldsetModule = document.createElement("fieldset");
+        let legendModule = document.createElement("legend");
+        let pBreakLine = document.createElement("p");
+        let legendModuleStep = document.createElement("legend");
+        let spnModuleAttribute;
+        let lblModuleAttribute;
+        let inpModuleAttribute;
 
-    processModuleList.push(selectModules.options[selectModules.selectedIndex].text);
-    fieldsetModule.className = "fieldset";
-    fieldsetModule.id = selectModules.options[selectModules.selectedIndex].text;
-    legendModuleStep.style.fontSize = "18px"
-    legendModule.innerHTML = selectModules.options[selectModules.selectedIndex].text;
-    legendModule.style.fontSize = "20px"
-    legendModule.className = "labels"
-    legendModuleStep.innerHTML = " Step: " + stepNr;
-    legendModuleStep.className = "labels"
+        let param = null;
 
-    fieldsetModule.appendChild(legendModule);
-    fieldsetModule.appendChild(pBreakLine);
-    fieldsetModule.appendChild(legendModuleStep);
+        processModuleList.push(selectModules.options[selectModules.selectedIndex].text);
+        fieldsetModule.className = "fieldset";
+        fieldsetModule.id = selectModules.options[selectModules.selectedIndex].text;
+        legendModuleStep.style.fontSize = "18px"
+        legendModule.innerHTML = selectModules.options[selectModules.selectedIndex].text;
+        legendModule.style.fontSize = "20px"
+        legendModule.className = "labels"
+        legendModuleStep.innerHTML = " Step: " + stepNr;
+        legendModuleStep.className = "labels"
 
-    while(param = moduleParams.iterateNext()) {
-        let paramBreak = document.createElement("p");
+        fieldsetModule.appendChild(legendModule);
+        fieldsetModule.appendChild(pBreakLine);
+        fieldsetModule.appendChild(legendModuleStep);
 
-        for (let i=0; i<param.attributes.length; i++) {
-            let attrib = param.attributes[i];
+        while (param = moduleParams.iterateNext()) {
+            let paramBreak = document.createElement("p");
 
-            if (attrib.name === "name" || attrib.name === "engineering_unit") {
-                spnModuleAttribute = document.createElement("span");
-                lblModuleAttribute = document.createElement("label");
-                lblModuleAttribute.className = "labels"
-                lblModuleAttribute.innerHTML = attrib.value;
-                spnModuleAttribute.appendChild(lblModuleAttribute);
+            for (let i = 0; i < param.attributes.length; i++) {
+                let attrib = param.attributes[i];
 
-                if(attrib.name === "name" ) {
-                    inpModuleAttribute = document.createElement("input");
-                    inpModuleAttribute.className = "moduleAttInp";
-                    inpModuleAttribute.id = attrib.value;
-                    spnModuleAttribute.appendChild(inpModuleAttribute);
+                if (attrib.name === "name" || attrib.name === "engineering_unit") {
+                    spnModuleAttribute = document.createElement("span");
+                    lblModuleAttribute = document.createElement("label");
+                    lblModuleAttribute.className = "labels"
+                    lblModuleAttribute.innerHTML = attrib.value;
+                    spnModuleAttribute.appendChild(lblModuleAttribute);
+
+                    if (attrib.name === "name") {
+                        inpModuleAttribute = document.createElement("input");
+                        inpModuleAttribute.className = "moduleAttInp";
+                        inpModuleAttribute.id = attrib.value;
+                        spnModuleAttribute.appendChild(inpModuleAttribute);
+                    }
+                    fieldsetModule.appendChild(spnModuleAttribute);
                 }
-                fieldsetModule.appendChild(spnModuleAttribute);
+                fieldsetModule.appendChild(paramBreak)
             }
-            fieldsetModule.appendChild(paramBreak)
+            fieldsetMain.appendChild(saveProcessButton);
         }
-        fieldsetMain.appendChild(saveProcessButton);
+        stepNr++;
+
+        lblModuleAttribute = document.createElement("label");
+        lblModuleAttribute.className = "labels"
+        lblModuleAttribute.innerHTML = "predecessor:";
+
+        inpModuleAttribute = document.createElement("input");
+        inpModuleAttribute.className = "moduleAttInp";
+        inpModuleAttribute.id = lblModuleAttribute.innerHTML;
+
+        spnModuleAttribute = document.createElement("span");
+        spnModuleAttribute.appendChild(lblModuleAttribute);
+        spnModuleAttribute.appendChild(inpModuleAttribute);
+
+        fieldsetModule.appendChild(spnModuleAttribute);
+        fieldsetModule.appendChild(pBreakLine);
+        fieldsetMain.appendChild(fieldsetModule);
+        divGrid.appendChild(fieldsetMain);
+        document.getElementById("wrapper").appendChild(divGrid);
     }
-    stepNr++;
-
-    lblModuleAttribute = document.createElement("label");
-    lblModuleAttribute.className = "labels"
-    lblModuleAttribute.innerHTML = "predecessor:";
-
-    inpModuleAttribute = document.createElement("input");
-    inpModuleAttribute.className = "moduleAttInp";
-    inpModuleAttribute.id = lblModuleAttribute.innerHTML;
-
-    spnModuleAttribute = document.createElement("span");
-    spnModuleAttribute.appendChild(lblModuleAttribute);
-    spnModuleAttribute.appendChild(inpModuleAttribute);
-
-    fieldsetModule.appendChild(spnModuleAttribute);
-    fieldsetModule.appendChild(pBreakLine);
-    fieldsetMain.appendChild(fieldsetModule);
-    divGrid.appendChild(fieldsetMain);
-    document.getElementById("wrapper").appendChild(divGrid);
 })
 
 /**
@@ -185,8 +188,8 @@ menuItemCreateNewProcess.addEventListener("click", function() {
     document.getElementById("selectModules").onchange = changeListener;
 
     function changeListener(){
-        let moduleInstanceName = selectModules.options[selectModules.selectedIndex].text;
-        getModuleData(moduleInstanceName);
+            let moduleInstanceName = selectModules.options[selectModules.selectedIndex].text;
+            getModuleData(moduleInstanceName);
     }
 })
 
