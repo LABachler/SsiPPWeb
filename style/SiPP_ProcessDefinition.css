@@ -2,6 +2,7 @@
 
 
 html,body,svg {
+    position: sticky;
     width: 100%;
     height: 105px;
     margin: 0; padding: 0;

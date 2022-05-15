@@ -1,11 +1,12 @@
 
 .fieldset {
-  padding:10px;
+  padding: 15px;
   border:3px solid #b6b6b9;
-  background:#383535;
+  background: #545151;
   border-top-left-radius: 20px;
   border-bottom-right-radius: 20px;
   box-shadow: 10px 10px rgba(0,0,0,.15);
+  display: block;
 }
 
 .divMain {
@@ -13,7 +14,7 @@
   color: white;
   grid-template-columns:0.2fr 1fr ;
   grid-template-rows: 3em;
-  gap: 2px 2px;
+  gap: 2px 20px;
   min-width: 0;
   min-height: 0;
 }
@@ -26,8 +27,9 @@
 .moduleAttInp {
   border-radius:10px;
   margin-left: 10px;
-  color:white;
+  color:black;
   box-shadow: 10px 10px rgba(0,0,0,.15);
+  display: block;
 }
 
 .moduleListItem {
@@ -37,7 +39,9 @@
 .moduleListItemName {
   font-family: "Lucida Console","Courier New", monospace;
 }
-
+.createNew{
+  color:white;
+}
 .moduleInfoPopUp {
   margin-top: 20px;
   margin-left:10px;
@@ -87,7 +91,8 @@
 
 .labels {
   margin-left: 10px;
-  color:white
+  color:white;
+  align-items: flex-start;
 }
 
 #btnSaveProcess .buttons {

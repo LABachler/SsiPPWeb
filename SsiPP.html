@@ -6,6 +6,21 @@
 
 </head>
 <body>
+<!-- imports -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script><link href="style/SiPP_ProcessDefinition.css" rel="stylesheet"/>
+
+<link href="style/SsiPP_CreateProcess.css" rel="stylesheet"/>
+<link href="style/SsiPP_SavedProcesses.css" rel="stylesheet"/>
+<link href="style/SSiPP_CreateNewmodule.css" rel="stylesheet"/>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="vkbeautify.0.99.00.beta.js"></script>
+<script type="module" src = "src/SSiPP_CreateNewModule.js"></script>
+<script type="module" src = "src/SSiPP_CreateProcess.js"></script>
+<script type="module" src = "src/SSiPP_CreateNewModuleInstance.js"></script>
+<script type="module" src = "src/SSiPP_SavedProcesses.js"></script>
+<script type="module" src = "src/SsiPP_Controls.js"></script>
 <svg xmlns="http://www.w3.org/2000/svg">
     <filter id="glow">
         <feGaussianBlur stdDeviation="2"/>
@@ -42,17 +57,6 @@
     </rect>
 </svg>
 
-<!-- imports -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script><link href="style/SiPP_ProcessDefinition.css" rel="stylesheet"/>
-
-<link href="style/SsiPP_CreateProcess.css" rel="stylesheet"/>
-<link href="style/SsiPP_SavedProcesses.css" rel="stylesheet"/>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="module" src = "src/SSiPP_CreateProcess.js"></script>
-<script type="module" src = "src/SSiPP_SavedProcesses.js"></script>
-<script type="module" src = "src/SsiPP_Controls.js"></script>
 
 <div class="wrapper" id="wrapper">
     <!-- Sidebar  -->
@@ -66,21 +70,26 @@
         <ul class="list-unstyled components">
             <p class="productionName">Bakery</p>
             <li class="active">
-                <a href="#homeSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Production lines</a>
+                <a href="#homeSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle" >Create new</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
-
+                    <li>
+                        <a href="#" id="createProcess" class="createNew">+ Process</a>
+                    </li>
+                    <li>
+                        <a href="#" id="createModule" class="createNew">+ Module</a>
+                    </li>
+                    <li>
+                        <a href="#" id="createModuleInstance" class="createNew">+ Module instance</a>
+                    </li>
                 </ul>
             </li>
             <li>
-                <a href="#" id="createProcess">Create new process</a>
-            </li>
-            <li>
-                <a href="#pageSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Saved processes</a>
+                <a href="#pageSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle" id="savedProcesses">Saved processes</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                 </ul>
             </li>
             <li>
-                <a href="#">Now running</a>
+                <a href="#" id="nowRunning">Now running</a>
             </li>
             <li>
                 <a href="#" id="logOut">Log Out</a>
@@ -88,7 +97,7 @@
         </ul>
     </nav>
     <div id="tablePosition">
-        <button class="buttons" id="sidebarCollapse">☰</button>
+        <button class="btn-dark" id="sidebarCollapse">☰</button>
         <p class="backgroundNLB">NLB Solutions</p>
         <p class="backgroundWMP">We make it possible!</p>
     </div>

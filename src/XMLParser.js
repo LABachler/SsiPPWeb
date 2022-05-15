@@ -1,6 +1,5 @@
-/*TODO api aufruf apicall.getmoduleinstancexml statt XMLFiles.xmlModuleInstances ->  klasse für api calls schreiben
-*/
-import * as XMLFiles from './XMLFiles.js';
+
+import * as APICalls from './APICalls.js';
 let xPath;
 
 
@@ -23,7 +22,7 @@ function xmlParser(text) {
  * @param {string} xmlText xml string to be evaluated
  * */
 
-function evaluateXPATH(xPath, xmlText) {
+export function evaluateXPATH(xPath, xmlText) {
     let xmlDoc = xmlParser(xmlText);
     return xmlDoc.evaluate(xPath, xmlDoc, null, XPathResult.ANY_TYPE, null);
 }
@@ -34,16 +33,25 @@ function evaluateXPATH(xPath, xmlText) {
 
 export function getAllModuleInstanceNames() {
     xPath = "//module_instance/@name"
-    return evaluateXPATH(xPath, XMLFiles.xmlModuleInstances);
+    return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
 }
 
 /**
 * get module type with module instance name
  * @param {string} miName module instance name
 * */
-export function getModuleByModuleInstanceName(miName) {
+export function getModuleTypeByModuleInstanceName(miName) {
     xPath = "string(//module_instance[@name='" + miName + "']/@type)";
-    return evaluateXPATH(xPath, XMLFiles.xmlModuleInstances);
+    return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
+}
+
+/**
+ * get module instance node with module instance name
+ * @param {string} miName module instance name
+ * */
+export function getModuleInstanceByModuleInstanceName(miName) {
+    xPath = "//module_instance[@name='" + miName + "']";
+    return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
 }
 
 /**
@@ -54,7 +62,7 @@ export function getModuleByModuleInstanceName(miName) {
 * */
 export function getModuleInstancesBySpecifiedAttribute(attName, attValue){
     xPath = "//module_instance[@"+attName+"='"+attValue+"']"
-    return evaluateXPATH(xPath, XMLFiles.xmlModuleInstances);
+    return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
 }
 
 /**
@@ -64,7 +72,7 @@ export function getModuleInstancesBySpecifiedAttribute(attName, attValue){
 **/
 export function getModuleParamsByModuleName(moduleName){
     xPath = "//module[@name='"+moduleName+"']/param";
-    return evaluateXPATH(xPath, XMLFiles.xmlModules);
+    return evaluateXPATH(xPath, APICalls.getAllModules());
 }
 
 /**
@@ -74,8 +82,9 @@ export function getModuleParamsByModuleName(moduleName){
  * */
 
 export function getModuleReportByModuleName(modName) {
-    xPath = "//module[@name='" + modName + "']/report/@name";
-    return evaluateXPATH(xPath, XMLFiles.xmlModules);
+    xPath = "//module[@name='" + modName + "']/report";
+    let xmlDoc = xmlParser(APICalls.getAllModules());
+    return xmlDoc.evaluate(xPath, xmlDoc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 }
 
 /**
@@ -85,7 +94,7 @@ export function getModuleReportByModuleName(modName) {
 
 export function getNodeAttributes(nodeName){
     xPath = "//"+nodeName+"/@*";
-    return evaluateXPATH(xPath, XMLFiles.xmlModules);
+    return evaluateXPATH(xPath, APICalls.getAllModules());
 }
 
 /**
@@ -94,16 +103,53 @@ export function getNodeAttributes(nodeName){
 
 export function getAllSavedProcesses(){
     xPath = "//process/@name";
-    return evaluateXPATH(xPath,XMLFiles.xmlProcesses);
+    return evaluateXPATH(xPath,APICalls.getAllSavedProcesses());
 }
+
+/**
+ * gets IDs of saved processes
+ * */
+
+export function getAllProcessesIDs(){
+    xPath = "//process/@id";
+    return evaluateXPATH(xPath,APICalls.getAllSavedProcesses());
+}
+
+/**
+ * gets IDs of saved modules
+ * */
+
+export function getAllModuleIDs(){
+    xPath = "//module/@id";
+    return evaluateXPATH(xPath,APICalls.getAllModules());
+}
+/**
+ * gets modules of saved modules
+ * */
+
+export function getAllModuleNames(){
+    xPath = "//module/@name";
+    return evaluateXPATH(xPath,APICalls.getAllModules());
+}
+
+
 /**
  * @param {string} pName process name
  * @returns {XPathResult}
  * */
 
 export function getProcessModuleInstancesByProcessName(pName){
-    xPath = "/processes/process[@name='" + pName + "']/*"
-    return evaluateXPATH(xPath,XMLFiles.xmlProcesses);
+    xPath = "/processes/process[@name='" + pName + "']/*";
+    return evaluateXPATH(xPath,APICalls.getAllSavedProcesses());
+}
+
+/**
+ * @param {string} str
+ * @param {number} index
+ * @param {string} stringToAdd
+ */
+export function addStr(str, index, stringToAdd){
+    return str.substring(0, index) + stringToAdd + str.substring(index, str.length);
 }
 
 
