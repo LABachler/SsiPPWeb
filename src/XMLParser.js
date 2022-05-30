@@ -158,9 +158,9 @@ export function getHistoricalProcessesById(id){
     return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
 }
 
-export function getHistoricalProcessModulesByProcessNameAndTime(pName, pTime){
-    xPath = "//process[@name="+pName+" and @finished="+pTime+"]/*";
-    return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
+export function getRunningProcessModuleInstances(){
+    xPath = "//process/*";
+    return evaluateXPATH(xPath,APICalls.getRunningProcess());
 }
 
 export function getHistoricalProcessModuleInstancesByProcessId(id){

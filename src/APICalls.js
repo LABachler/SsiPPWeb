@@ -16,6 +16,8 @@ export const POST_API_URL_ADD_MODULE =
     "http://localhost:7000/SSiPP/add_module";
 export const POST_API_URL_SET_PROCESS =
     "http://localhost:7000/SSiPP/running_process";
+export const GET_API_URL_RUNNING_PROCESS =
+    "http://localhost:7000/SSiPP/get_running_process";
 
 
 
@@ -23,6 +25,7 @@ let xmlModuleInstances;
 let xmlModules;
 let xmlProcesses;
 let xmlHistoricalProcesses;
+let xmlRunningProcess;
 
 $.ajax({
     async: false,
@@ -33,6 +36,7 @@ $.ajax({
         xmlProcesses = data;
     }
 });
+
 
 $.ajax({
     async: false,
@@ -89,5 +93,20 @@ export function getAllModules(){
  * */
 export function getAllModuleInstances(){
     return xmlModuleInstances;
+}
+/**
+ * @return {String} running process in an API
+ * */
+export function getRunningProcess(){
+    $.ajax({
+        async: false,
+        url: GET_API_URL_RUNNING_PROCESS,
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            console.log(data);
+            return data;
+        }
+    });
 }
 

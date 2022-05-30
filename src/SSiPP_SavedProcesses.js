@@ -14,8 +14,6 @@ let nowRunningMenuItem = document.getElementById('nowRunning');
 nowRunningMenuItem.addEventListener("click", function() {
     let nowRunning = true;
     showData(runProcessName,nowRunning);
-    //TODO: Change showData function parameter  runProcessName to processXml
-    //TODO Add api call every 2 sec to update data
 })
 
 while(processName = processesNames.iterateNext()){
@@ -43,7 +41,7 @@ while(processName = processesNames.iterateNext()){
  * @param {string} processName name of a process
  * @param {boolean} nowRunning is the process running or not
  * */
-function showData(processName, nowRunning){
+function showData(processName, nowRunning) {
 
     //clear div
     $('select').remove();
@@ -60,33 +58,31 @@ function showData(processName, nowRunning){
     let startProcessButton = createElement('button', "btn-dark");
     let buttonText;
 
-    if(nowRunning)
+    if (nowRunning)
         buttonText = "STOP";
     else
         buttonText = "START";
 
-    startProcessButton.innerText= buttonText;
+    startProcessButton.innerText = buttonText;
 
-    startProcessButton.addEventListener('click', function (){
-        if(buttonText === "STOP"){
+    startProcessButton.addEventListener('click', function () {
+        if (buttonText === "STOP") {
             buttonText = "START";
             document.getElementById("" + processName).click();
             document.getElementById("savedProcesses").click();
-        }
-        else{
+        } else {
             buttonText = "STOP";
             runProcessName = processName;
-            //TODO: send api POST to start the process
             let runProcessID = XMLParser.getProcessIDByProcessesName(processName);
 
             document.getElementById("savedProcesses").click();
             document.getElementById('nowRunning').click();
 
-            console.log( "<startProcess id=\""+ runProcessID.stringValue + "\" command=\"START\"></startProcess>");
+            console.log("<startProcess id=\"" + runProcessID.stringValue + "\" command=\"START\"></startProcess>");
             $.ajax({
                 type: "POST",
                 url: APICalls.POST_API_URL_SET_PROCESS,
-                data: "<startProcess id=\""+ runProcessID.stringValue + "\" command=\"START\"/>",
+                data: "<startProcess id=\"" + runProcessID.stringValue + "\" command=\"START\"/>",
                 contentType: "text",
                 success: function (result) {
                     console.log(result);
@@ -109,13 +105,19 @@ function showData(processName, nowRunning){
     divGrid.appendChild(startProcessButton);
     divGrid.appendChild(dataTable);
     let processModInstances;
-    //if(nowRunning === false)
+    if (nowRunning === false){
         processModInstances = XMLParser.getProcessModuleInstancesByProcessName(processName);
-   // else
-        //processModInstances = XMLParser.getRunningProcessModuleInstancesByProcessId(id);
-   // let pmInstance = null;
+        appendData(processModInstances, dataTable, nowRunning);
+    }
+    else{
+        processModInstances = XMLParser.getRunningProcessModuleInstances();
+        setInterval(function (){
+            $('#dataTable').empty();
+            appendData(processModInstances,dataTable,nowRunning);
 
-    appendData(processModInstances,dataTable,nowRunning);
+        }, 15000)
+    }
+
 }
 
 export function appendData(processModInstances,
