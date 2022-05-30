@@ -1,8 +1,10 @@
 import * as XMLParser from "./XMLParser.js";
+import * as APICalls from "./APICalls.js";
 
 let menuItemCreateNewModule = document.getElementById("createModule");//menu item
 
 menuItemCreateNewModule.addEventListener('click', function () {
+
     let divMain = document.getElementById("tablePositionCreateProcess");//
     let formMain = document.createElement("form");
     let divForm = document.createElement("div");
@@ -28,7 +30,7 @@ menuItemCreateNewModule.addEventListener('click', function () {
     inpModuleName.className = "form-control";
     inpModuleName.style.cssText = "text-transform: uppercase";
     inpModuleName.id = "inpModuleName";
-    divMain.className = "divMain";
+    divMain.className = "moduleDiv";
 
     fieldsetModule.appendChild(legendFieldModuleName);
     fieldsetModule.appendChild(lblModuleName);
@@ -40,10 +42,12 @@ menuItemCreateNewModule.addEventListener('click', function () {
     //remove elem from div
 
     divMain.innerHTML = "";
+    $('.table').remove();
     $('#tablePosition').hide();
     $('#tablePositionCreateProcess').show();
     $('#createProcessField').hide();
     $('#moduleInstanceForm').hide();
+    $('.moduleInstanceDiv').hide();
     let btnSaveModule = document.createElement('button');
     btnSaveModule.innerHTML = 'Save';
     btnSaveModule.className = "btn-dark";
@@ -59,11 +63,11 @@ menuItemCreateNewModule.addEventListener('click', function () {
     btnAddReport.className = "btn-dark";
     btnAddReport.id = 'addReport';
 
-    let btnHideSB = document.createElement('button');
+    /*let btnHideSB = document.createElement('button');
     btnHideSB.innerHTML = '☰';
     btnHideSB.className = "btn-dark";
     btnHideSB.type = "button";
-    btnHideSB.id = 'sidebarCollapseButton';
+    btnHideSB.id = 'sidebarCollapseButton';*/
 
     let paramNr = 0;
     let reportNr = 0;
@@ -150,15 +154,27 @@ menuItemCreateNewModule.addEventListener('click', function () {
 
                 }
                 xmlModuleString += "</module>";
-                xmlModuleString = vkbeautify.xml(xmlModuleString, 4);
+
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: APICalls.POST_API_URL_ADD_MODULE,
+                    data: xmlModuleString.toString(),
+                    contentType: "text",
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    error: function (result, status) {
+                        console.log(result + "->" + status);
+                    }
+                });
                 console.log(xmlModuleString);
             }else alert("You have to fill out all of the fields!");
-//TODO: api POST ajax -> send module to an api
         });
     });
 
-    fieldsetModule.append(btnAddParameter, btnAddReport);
-    divMain.append(btnHideSB,formMain, btnSaveModule);
+    fieldsetModule.append(btnAddParameter, btnAddReport, btnSaveModule);
+    divMain.append(formMain);//btnHideSB,
 })
 
 function getMaxId(){

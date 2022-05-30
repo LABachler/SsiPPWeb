@@ -16,6 +16,12 @@ let fieldsetMain = document.createElement("fieldset");
 let legendFieldName = document.createElement("legend");
 let lblProcessName = document.createElement("label");
 let inpProcessName = document.createElement("input");
+let lblProcessDriver = document.createElement("label");
+let inpProcessDriver = document.createElement("input");
+let lblProcessWeight = document.createElement("label");
+let inpProcessWeight = document.createElement("input");
+let lblProcessScale = document.createElement("label");
+let inpProcessScale = document.createElement("input");
 let processModuleList = [];
 let stepNr = 0;
 
@@ -29,9 +35,30 @@ divMain.className = "divMain";
 inpProcessName.className = "form-control";
 inpProcessName.id = "inpProcessName";
 
+lblProcessDriver.innerHTML = "Driver";
+lblProcessDriver.className = "labels";
+inpProcessDriver.className = "form-control";
+inpProcessDriver.id = "inpProcessDriver";
+
+lblProcessWeight.innerHTML = "Weight";
+lblProcessWeight.className = "labels";
+inpProcessWeight.className = "form-control";
+inpProcessWeight.id = "inpProcessWeight";
+
+lblProcessScale.innerHTML = "Scale";
+lblProcessScale.className = "labels";
+inpProcessScale.className = "form-control";
+inpProcessScale.id = "inpProcessScale";
+
 fieldsetMain.appendChild(legendFieldName);
 fieldsetMain.appendChild(lblProcessName);
 fieldsetMain.appendChild(inpProcessName);
+fieldsetMain.appendChild(lblProcessDriver);
+fieldsetMain.appendChild(inpProcessDriver);
+fieldsetMain.appendChild(lblProcessWeight);
+fieldsetMain.appendChild(inpProcessWeight);
+fieldsetMain.appendChild(lblProcessScale);
+fieldsetMain.appendChild(inpProcessScale);
 divForm.appendChild(fieldsetMain);
 formMain.appendChild(divForm);
 
@@ -76,6 +103,7 @@ addButton.addEventListener('click', function () {
         fieldsetModule.appendChild(legendModuleStep);
 
         while (param = moduleParams.iterateNext()) {
+            console.log(param);
             let paramBreak = document.createElement("p");
 
             for (let i = 0; i < param.attributes.length; i++) {
@@ -104,9 +132,9 @@ addButton.addEventListener('click', function () {
                 fieldsetModule.appendChild(paramBreak)
             }
         }
-        stepNr++;
         let selPrevious = document.createElement("select");
         selPrevious.id = stepNr.toString();
+        stepNr++;
 
         let option = document.createElement("option");
         option.text = "-";
@@ -150,14 +178,16 @@ selectModules.id = "selectModules";
 menuItemCreateNewProcess.addEventListener("click", function() {
     //remove elem from div
     divMain.innerHTML = "";
+    $('.table').remove();
     $('#createProcessField').show();
     $('label').show();
     $('#createModuleFieldset').hide();
     $('#tablePosition').hide();
     $('#tablePositionCreateProcess').show();
     $('#moduleInstanceForm').hide();
+    $('.moduleInstanceDiv').hide();
 
-    let btnHideSidebar = document.createElement('button');
+    /*let btnHideSidebar = document.createElement('button');
     btnHideSidebar.innerHTML = '☰';
     btnHideSidebar.className = "btn-dark";
     btnHideSidebar.id = 'sidebarCollapseButton';
@@ -168,7 +198,7 @@ menuItemCreateNewProcess.addEventListener("click", function() {
         });
     });
 
-    divMain.appendChild(btnHideSidebar);
+    divMain.appendChild(btnHideSidebar);*/
 
     //add items to a menu
     let menuSelHeader = document.createElement("option");
@@ -194,8 +224,10 @@ menuItemCreateNewProcess.addEventListener("click", function() {
 
     selectModules.className = 'selectMenu';
     selectWrapper.appendChild(selectModules);
-    document.getElementById("tablePositionCreateProcess").appendChild(selectWrapper);
-    document.getElementById('tablePositionCreateProcess').appendChild(addButton);
+    let div = document.getElementById('tablePositionCreateProcess');
+    div.className = "divMain";
+    div.appendChild(addButton);
+    div.appendChild(selectWrapper);
 
     /**
     * on select from a menu show info about selected module instance
@@ -229,7 +261,6 @@ function getModuleData(moduleInstanceName){
     document.getElementById("tablePositionCreateProcess").appendChild(moduleInfoPopUp);
 
     while(param = moduleParams.iterateNext()){
-        console.log(param);
         for (let i=0; i<param.attributes.length; i++){
             let attrib = param.attributes[i];
             moduleInfoPopUp.innerText += attrib.name + ": " +attrib.value + "\n";
@@ -247,35 +278,26 @@ saveProcessButton.id = "btnSaveProcess";
 
 saveProcessButton.addEventListener('click', function () {
     if(validateForm()){
-    let title = document.getElementById("inpProcessName").value; //new process title
 
-    let xmlFile ="<process id=\"" + findMaxProcessId() + "\" name=\"" + title + "\" default_quantity=\"100kg\" multiplier=\"\">";
+    let xmlFile ="<process id=\"" + findMaxProcessId()
+        + "\" name=\"" + document.getElementById("inpProcessName").value
+        + "\" driver=\"" + document.getElementById("inpProcessDriver").value
+        + "\" default_quantity=\""+ document.getElementById("inpProcessWeight").value
+        + "\" scale=\""+ document.getElementById("inpProcessScale").value +"\">";
 
 
     for(let i = 0; i < processModuleList.length; i++){
         let moduleInstanceName = document.getElementById(processModuleList[i]);
         let moduleInstanceType = XMLParser.getModuleTypeByModuleInstanceName(moduleInstanceName.id).stringValue;
-        let moduleInstance = XMLParser.getModuleInstanceByModuleInstanceName(processModuleList[i]); //gets process module xml node
+        let moduleInstance = XMLParser.getModuleInstanceByModuleInstanceName(processModuleList[i]);
         let moduleInstanceText = null;
         let modInstanceIterator = null;
         let moduleParams;
-        let report = document.createRange().createContextualFragment("<module_instance_report>\n" +
-            "                <time_started></time_started>\n" +
-            "                <time_finished></time_finished>\n" +
-            "                <status></status>\n" +
-            "                <message></message>\n" +
-            "                <error></error>\n" +
-            "            </module_instance_report>");
+        let report = document.createRange().createContextualFragment("<module_instance_report><time_started></time_started><time_finished></time_finished><status></status><message></message><error></error></module_instance_report>");
 
-        if(isParallel(i).length !== 0){
+        if(isParallel(i).length !== 1){
+            xmlFile = xmlFile + "<parallel>";
             let parallelModules = isParallel(i);
-            while(modInstanceIterator = moduleInstance.iterateNext())
-                moduleInstanceText = modInstanceIterator;
-
-            moduleInstanceText = appendParametersAndReportValues(moduleInstanceText,moduleInstanceType);
-            xmlFile = xmlFile + new XMLSerializer().serializeToString(moduleInstanceText) + "<parallel>";
-            console.log(moduleInstanceText);
-            console.log(xmlFile);
             let parallels = 0;
             for(parallels = 0; parallels < isParallel(i).length; parallels++){
                 console.log(isParallel(i).length);
@@ -291,7 +313,6 @@ saveProcessButton.addEventListener('click', function () {
                 console.log(moduleInstanceText);
             }
             xmlFile = xmlFile + "</parallel>";
-            console.log(i)
             i += parallels;
 
             console.log(i);
@@ -300,25 +321,19 @@ saveProcessButton.addEventListener('click', function () {
             moduleInstanceText = moduleInstance.iterateNext();
             moduleParams = XMLParser.getModuleParamsByModuleName(moduleInstanceType);
             moduleInstanceText = appendParametersAndReportValues(moduleInstanceText,moduleInstanceType);
-            console.log(report);
             moduleInstanceText.appendChild(report);
             xmlFile = xmlFile + new XMLSerializer().serializeToString(moduleInstanceText);
         }
         console.log(moduleInstanceText);
     }
     xmlFile = xmlFile + "</process>";
-    xmlFile = vkbeautify.xml(xmlFile,4);
-    //TODO Change this to only send one process not all when api is complete
-    let updatedString = APICalls.getAllSavedProcesses().substring(0,APICalls.getAllSavedProcesses().length - 12)
-        + xmlFile + "\n" + APICalls.getAllSavedProcesses().substring(APICalls.getAllSavedProcesses().length - 12,
-            APICalls.getAllSavedProcesses().length);
-
+    console.log(xmlFile);
 
     $.ajax({
         type: "POST",
-        url: APICalls.GET_API_URL_ALL_PROCESSES_TEMPLATES,
-        data: JSON.stringify({"processes" : updatedString}),
-        contentType: "application/json",
+        url: APICalls.POST_API_URL_ADD_PROCESS,
+        data: xmlFile,
+        contentType: "text",
         success: function (result) {
             console.log(result);
         },
@@ -327,7 +342,6 @@ saveProcessButton.addEventListener('click', function () {
         }
     });
 
-    console.log(updatedString);
     }
     else
         alert("You have to fill out all of the fields");
@@ -370,13 +384,12 @@ function appendParametersAndReportValues(moduleInstanceText,moduleInstanceType){
  * @param {number} processStep
  * @return {array} parallelModuleIds
  */
+//TODO: optimize this method to save correctly
 function isParallel(processStep){
     let parallelModuleIds = [];
     for(let i = 0; i < processModuleList.length; i++) {
-        let idNr = i+1;
-        let select = document.getElementById((idNr).toString());
-        console.log(select.id + "ID -> SELECT" + (select.selectedIndex - 1));
-        if(processStep === select.selectedIndex - 1){
+        let select = document.getElementById((i).toString());
+        if(processStep === select.selectedIndex){
             parallelModuleIds.push(processModuleList[i]);
         }
     }

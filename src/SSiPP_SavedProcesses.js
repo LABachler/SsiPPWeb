@@ -1,4 +1,5 @@
 import * as XMLParser from './XMLParser.js';
+import * as APICalls from "./APICalls.js";
 
 /**
  * gets all process names and adds them to a side sub-menu
@@ -7,8 +8,7 @@ import * as XMLParser from './XMLParser.js';
 let processesSubMenu = document.getElementById("pageSubmenu");  //list of all saved processes
 let processesNames = XMLParser.getAllSavedProcesses();
 let processName = null;
-let runProcessName = "";
-
+let runProcessName;
 let nowRunningMenuItem = document.getElementById('nowRunning');
 
 nowRunningMenuItem.addEventListener("click", function() {
@@ -48,23 +48,11 @@ function showData(processName, nowRunning){
     //clear div
     $('select').remove();
     $('label').hide();
-    $('button').remove();
+    //$('button').remove();
     $('fieldset').hide();
     $('#tablePosition').show();
     $('#tablePositionCreateProcess').hide();
-
-    let btnHideSidebarSP = createElement('button', "btn-dark");
-    btnHideSidebarSP.innerHTML = '☰';
-    btnHideSidebarSP.id = 'sidebarCollapseBtn';
-
-    let subTableReport = null;
-
-    $(document).ready(function () {
-        $('#sidebarCollapseBtn').on('click', function () {
-            $('#sidebar').toggleClass('active');
-        });
-    });
-
+    $('.table').remove();
 
     let headerProcessName = createElement('h2', 'h2');
     headerProcessName.innerHTML = processName;
@@ -86,10 +74,27 @@ function showData(processName, nowRunning){
             document.getElementById("savedProcesses").click();
         }
         else{
-            //TODO: send api POST to start the process
+            buttonText = "STOP";
             runProcessName = processName;
+            //TODO: send api POST to start the process
+            let runProcessID = XMLParser.getProcessIDByProcessesName(processName);
+
             document.getElementById("savedProcesses").click();
             document.getElementById('nowRunning').click();
+
+            console.log( "<startProcess id=\""+ runProcessID.stringValue + "\" command=\"START\"></startProcess>");
+            $.ajax({
+                type: "POST",
+                url: APICalls.POST_API_URL_SET_PROCESS,
+                data: "<startProcess id=\""+ runProcessID.stringValue + "\" command=\"START\"/>",
+                contentType: "text",
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
         }
     });
 
@@ -100,13 +105,25 @@ function showData(processName, nowRunning){
     insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
 
     divGrid.appendChild(headerProcessName);
-    divGrid.appendChild(btnHideSidebarSP);
+    //divGrid.appendChild(btnHideSidebarSP);
     divGrid.appendChild(startProcessButton);
     divGrid.appendChild(dataTable);
+    let processModInstances;
+    //if(nowRunning === false)
+        processModInstances = XMLParser.getProcessModuleInstancesByProcessName(processName);
+   // else
+        //processModInstances = XMLParser.getRunningProcessModuleInstancesByProcessId(id);
+   // let pmInstance = null;
 
-    let processModInstances = XMLParser.getProcessModuleInstancesByProcessName(processName);
+    appendData(processModInstances,dataTable,nowRunning);
+}
+
+export function appendData(processModInstances,
+                           dataTable,
+                           nowRunning){
+
+    let subTableReport = null;
     let pmInstance = null;
-
     while(pmInstance = processModInstances.iterateNext()){
 
         let mainTableRow = dataTable.insertRow(-1);
@@ -120,7 +137,7 @@ function showData(processName, nowRunning){
 
                 let mainRowCellWrapper = document.createElement('div');
                 mainRowCellWrapper.style.cssText = "border: 1px solid transparent; vertical-align: top; width: " +
-                                                    100 / pmInstance.children.length + "%; float:left";
+                    100 / pmInstance.children.length + "%; float:left";
 
                 if(pmInstance.children[i].nodeName === 'subParallel'){
                     let rowCellWrapper = createElement('div', 'subCellWrapper');
@@ -129,7 +146,7 @@ function showData(processName, nowRunning){
                         let subTable = createElement('table', 'subTable');
 
                         insertRowAndCellWithText(subTable,
-                            pmInstance.children[i].children[k].getAttribute('name'), 'subCell');
+                            pmInstance.children[i].children[k].getAttribute('datablock_name'), 'subCell');
 
                         if(nowRunning === true){
                             subTableReport = createSubTableReport();
@@ -154,7 +171,7 @@ function showData(processName, nowRunning){
                 else if(pmInstance.children[i].nodeName === 'module_instance'){
 
                     let subTable = createElement('table', 'subTable');
-                    insertRowAndCellWithText(subTable, pmInstance.children[i].getAttribute("name"), 'subCell');
+                    insertRowAndCellWithText(subTable, pmInstance.children[i].getAttribute("datablock_name"), 'subCell');
 
                     if(nowRunning === true){
                         subTableReport = createSubTableReport();
@@ -175,7 +192,7 @@ function showData(processName, nowRunning){
 
             let mainRowCellWrapper = createElement('div', 'mainRowCellWrapper');
             let subTable = createElement('table', 'subTable');
-            insertRowAndCellWithText(subTable, pmInstance.getAttribute('name'), 'subCell');
+            insertRowAndCellWithText(subTable, pmInstance.getAttribute('datablock_name'), 'subCell');
 
             if(nowRunning === true){
                 subTableReport = createSubTableReport();
@@ -192,7 +209,6 @@ function showData(processName, nowRunning){
 
         insertRowAndCellWithText(dataTable, '🢃', 'noDataRow');
     }
-
     insertRowAndCellWithText(dataTable, 'END', 'noDataRow');
 }
 
@@ -214,7 +230,7 @@ function insertRowAndCellWithText(table, text, className){
  * @param {string} elementName name of the element to create
  * @param {string} className class of the element
  * */
-function createElement(elementName, className){
+export function createElement(elementName, className){
     let element = document.createElement(elementName);
     element.className = className;
     return element;
@@ -247,7 +263,8 @@ function createModuleInstanceTable(hasSubParallel,
     mainRowCellWrapper.appendChild(subTable);
 
     if(nowRunning === true){
-        createTableToggleFunction(subTable, subTableReport);
+        subTable.appendChild(subTableReport);
+        //createTableToggleFunction(subTable, subTableReport);
     }
 }
 
@@ -298,10 +315,10 @@ function createSubTables(hasSubParallel,
 
 /**
  * creates a toggle function on a module instance table to show or hide report values
- * @param {HTMLTableElement} table adds methode to this table
+ * @param {HTMLTableElement} table adds method to this table
  * @param {HTMLTableElement} toggleTable table that needs to be shown or hidden
  * */
-function createTableToggleFunction(table, toggleTable){
+export function createTableToggleFunction(table, toggleTable){
     let toggle = 0;
     table.addEventListener('click', function (){
         if(toggle === 0){
@@ -384,7 +401,6 @@ function createReportValuesTable(pmInstance, subTable){
 
 
     reportTableCell.appendChild(reportTable)
-
 }
 
 /**

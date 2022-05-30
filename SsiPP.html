@@ -21,6 +21,7 @@
 <script type="module" src = "src/SSiPP_CreateNewModuleInstance.js"></script>
 <script type="module" src = "src/SSiPP_SavedProcesses.js"></script>
 <script type="module" src = "src/SsiPP_Controls.js"></script>
+<script type="module" src = "src/SsiPP_HistoricalProcesses.js"></script>
 <svg xmlns="http://www.w3.org/2000/svg">
     <filter id="glow">
         <feGaussianBlur stdDeviation="2"/>
@@ -57,6 +58,7 @@
     </rect>
 </svg>
 
+<button class="btn-dark" id="sidebarCollapse">☰</button>
 
 <div class="wrapper" id="wrapper">
     <!-- Sidebar  -->
@@ -92,12 +94,14 @@
                 <a href="#" id="nowRunning">Now running</a>
             </li>
             <li>
+                <a href="#" id="historicalProcesses">History</a>
+            </li>
+            <li>
                 <a href="#" id="logOut">Log Out</a>
             </li>
         </ul>
     </nav>
     <div id="tablePosition">
-        <button class="btn-dark" id="sidebarCollapse">☰</button>
         <p class="backgroundNLB">NLB Solutions</p>
         <p class="backgroundWMP">We make it possible!</p>
     </div>

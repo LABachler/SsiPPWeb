@@ -1,27 +1,22 @@
 // api url
 
 export const GET_API_URL_ALL_PROCESSES_TEMPLATES =
-    "http://localhost:3000/processes";
+    "http://localhost:7000/SSiPP/process_templates";
 export const GET_API_URL_HISTORICAL_PROCESSES =
-    "http://localhost:3000/processesHistory";
+    "http://localhost:7000/SSiPP/historical_processes";
 export const GET_API_URL_ALL_MODULE_INSTANCES =
-    "http://localhost:3000/moduleInstances";
+    "http://localhost:7000/SSiPP/module_instances";
 export const GET_API_URL_ALL_MODULES =
-    "http://localhost:3000/modules";
+    "http://localhost:7000/SSiPP/modules";
 export const POST_API_URL_ADD_PROCESS =
-    "http://localhost:3000/process";
+    "http://localhost:7000/SSiPP/add_process_template";
 export const POST_API_URL_ADD_MODULE_INSTANCE =
-    "http://localhost:3000/moduleInstance";
+    "http://localhost:7000/SSiPP/add_module_instance";
 export const POST_API_URL_ADD_MODULE =
-    "http://localhost:3000/module";
+    "http://localhost:7000/SSiPP/add_module";
 export const POST_API_URL_SET_PROCESS =
-    "http://localhost:3000/runningProcess";
+    "http://localhost:7000/SSiPP/running_process";
 
-
-
-// getHistoricalProcesses()
-// setProcess(xmlString, STATUS) -> bei jeder Änderung kommt über Stream ein update des XML Strings
-// saveProcessTemplate(xmlstring)
 
 
 let xmlModuleInstances;
@@ -29,74 +24,46 @@ let xmlModules;
 let xmlProcesses;
 let xmlHistoricalProcesses;
 
-/*
-$.ajax({
-    type: "POST",
-    url: api_url_module_instances,
-    data: JSON.stringify({"moduleInstances" : xmlModuleInstances.toString() }),
-    contentType: "application/json",
-    success: function (result) {
-        console.log(result);
-    },
-    error: function (result, status) {
-        console.log(result);
-    }
-});
-
-
-$.ajax({
-    type: "POST",
-    url: api_url_modules,
-    data: JSON.stringify({"modules" : xmlModules.toString() }),
-    contentType: "application/json",
-    success: function (result) {
-        console.log(result);
-    },
-    error: function (result, status) {
-        console.log(result);
-    }
-});*/
-
-
 $.ajax({
     async: false,
     url: GET_API_URL_ALL_PROCESSES_TEMPLATES,
     type: "GET",
-    dataType: "json",
+    dataType: "text",
     success: function (data) {
-        xmlProcesses = data[data.length - 1].processes;
+        xmlProcesses = data;
     }
 });
+
 $.ajax({
     async: false,
     url: GET_API_URL_ALL_MODULES,
     type: "GET",
-    dataType: "json",
+    dataType: "text",
     success: function (data) {
-        xmlModules = data[data.length - 1].modules;
+        xmlModules = data;
     }
 });
+
 $.ajax({
     async: false,
     url: GET_API_URL_ALL_MODULE_INSTANCES,
     type: "GET",
-    dataType: "json",
+    dataType: "text",
     success: function (data) {
-        xmlModuleInstances = data[data.length - 1].moduleInstances;
+        xmlModuleInstances = data;
     }
 });
-//TODO: add this when an api exists
-/*
+
 $.ajax({
     async: false,
     url: GET_API_URL_HISTORICAL_PROCESSES,
     type: "GET",
-    dataType: "json",
+    dataType: "text",
     success: function (data) {
-        xmlModuleInstances = data[data.length - 1].processesHistory;
+        xmlHistoricalProcesses = data;
     }
 });
-*/
+
 
 /**
  * @return {String} last saved processes in an API
@@ -104,6 +71,7 @@ $.ajax({
 export function getAllSavedProcesses(){
     return xmlProcesses;
 }
+
 /**
  * @return {String} all historical processes in an API
  * */

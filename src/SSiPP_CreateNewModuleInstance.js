@@ -1,12 +1,16 @@
 
 import * as XMLParser from "./XMLParser.js";
+import * as APICalls from "./APICalls.js";
 
 let createNewModuleInstance = document.getElementById("createModuleInstance");
-let divMain = document.getElementById("tablePositionCreateProcess");
+let divMain = document.createElement("div");
+divMain.className = "moduleInstanceDiv";//document.getElementById("tablePositionCreateProcess");
+let wrapper = document.getElementById("wrapper");
+wrapper.appendChild(divMain);
 let paramIds = [];
 
 createNewModuleInstance.addEventListener("click", function (){
-    let btnHideSB = document.createElement('button');
+    /*let btnHideSB = document.createElement('button');
     btnHideSB.innerHTML = '☰';
     btnHideSB.className = "btn-dark";
     btnHideSB.type = "button";
@@ -16,18 +20,21 @@ createNewModuleInstance.addEventListener("click", function (){
         $('#sidebarCollapseButton').on('click', function () {
             $('#sidebar').toggleClass('active');
         });
-    });
+    });*/
     divMain.innerHTML = "";
+    $('.table').remove();
     $('#tablePosition').hide();
     $('#tablePositionCreateProcess').show();
     $('#createModuleFieldset').hide();
     $('#createProcessField').hide();
     $('#moduleInstanceFrom').show();
+    $('.moduleInstanceDiv').show();
+    $('#saveModule').hide();
     /**
      * select menu with all modules
      * */
 
-    divMain.appendChild(btnHideSB);
+    //divMain.appendChild(btnHideSB);
     let selectWrapper = document.createElement("div");
     let moduleNames = XMLParser.getAllModuleNames();
     let selectModules = document.createElement("select");
@@ -81,8 +88,8 @@ function createField(type){
     let divForm = document.createElement("div");
     let fieldsetMain = document.createElement("fieldset");
     let legendFieldName = document.createElement("legend");
-    let lblModuleInstanceName = document.createElement("label");
-    let inpModuleInstanceName = document.createElement("input");
+    //let lblModuleInstanceName = document.createElement("label");
+    //let inpModuleInstanceName = document.createElement("input");
     let fieldsetMIParameter = document.createElement("fieldset");
     let legendParameter = document.createElement("legend");
     fieldsetMIParameter.id ="createModuleInstanceParameterFieldset";
@@ -97,21 +104,21 @@ function createField(type){
     fieldsetMain.id ="createModuleInstanceField";
     legendFieldName.innerHTML = type;
     legendFieldName.className = "labels"
-    lblModuleInstanceName.innerHTML = "Name a module instance";
-    lblModuleInstanceName.className = "labels"
-    divMain.className = "divMain";
-    inpModuleInstanceName.className = "form-control";
-    inpModuleInstanceName.id = "inpModuleInstanceName";
-    inpModuleInstanceName.value = type + "-";
+    //lblModuleInstanceName.innerHTML = "Name a module instance";
+    //lblModuleInstanceName.className = "labels"
+    //divMain.className = "divMain";
+    //inpModuleInstanceName.className = "form-control";
+    //inpModuleInstanceName.id = "inpModuleInstanceName";
+    //inpModuleInstanceName.value = type + "-";
 
     fieldsetMain.appendChild(legendFieldName);
-    fieldsetMain.appendChild(lblModuleInstanceName);
-    fieldsetMain.appendChild(inpModuleInstanceName);
+    //fieldsetMain.appendChild(lblModuleInstanceName);
+    //fieldsetMain.appendChild(inpModuleInstanceName);
     divForm.appendChild(fieldsetMain);
-    formMain.appendChild(divForm);
+    divMain.appendChild(divForm);
 
 
-    let params = ["Plc IP", "Data block Name", "Line ID"]
+    let params = ["Plc IP", "Data block Name", "Driver", "Line ID"];
     for(let p = 0; p <params.length; p++){
         let lbl = document.createElement("label");
         let inp = document.createElement("input");
@@ -135,10 +142,10 @@ function createField(type){
         $('#saveModuleInstance').on('click', function () {
             if(validateForm()){
 
-                let xmlString = "<module_instance type=\""+type+"\" plc=\""+ document.getElementById(paramIds[0]).value +"\" name=\""
-                    + document.getElementById("inpModuleInstanceName").value +"\" datablock_name=\""
-                    + document.getElementById(paramIds[1]).value +"\" line_id=\""
-                    + document.getElementById(paramIds[2]).value +"\"/>"
+                let xmlString = "<module_instance type=\""+type+"\" plc=\""+ document.getElementById(paramIds[0]).value
+                    +"\" datablock_name=\"" + document.getElementById(paramIds[1]).value
+                    +"\" driver=\"" + document.getElementById(paramIds[2]).value
+                    +"\" line_id=\"" + document.getElementById(paramIds[3]).value +"\"/>"
                 console.log(xmlString);
                 xmlModuleInstancePOSTApi(xmlString);
                 $('#moduleInstanceForm').remove();
@@ -152,8 +159,20 @@ function createField(type){
     return formMain;
 
 }
-//TODO API Call to POST on module instances api
+
 function xmlModuleInstancePOSTApi(xmlString){
+    $.ajax({
+        type: "POST",
+        url: APICalls.POST_API_URL_ADD_MODULE_INSTANCE,
+        data: xmlString,
+        contentType: "text",
+        success: function (result) {
+            console.log(result);
+        },
+        error: function (result, status) {
+            console.log(result);
+        }
+    });
 
 }
 

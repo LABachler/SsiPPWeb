@@ -32,7 +32,7 @@ export function evaluateXPATH(xPath, xmlText) {
 * */
 
 export function getAllModuleInstanceNames() {
-    xPath = "//module_instance/@name"
+    xPath = "//module_instance/@datablock_name"
     return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
 }
 
@@ -41,7 +41,7 @@ export function getAllModuleInstanceNames() {
  * @param {string} miName module instance name
 * */
 export function getModuleTypeByModuleInstanceName(miName) {
-    xPath = "string(//module_instance[@name='" + miName + "']/@type)";
+    xPath = "string(//module_instance[@datablock_name='" + miName + "']/@type)";
     return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
 }
 
@@ -50,10 +50,9 @@ export function getModuleTypeByModuleInstanceName(miName) {
  * @param {string} miName module instance name
  * */
 export function getModuleInstanceByModuleInstanceName(miName) {
-    xPath = "//module_instance[@name='" + miName + "']";
+    xPath = "//module_instance[@datablock_name='" + miName + "']";
     return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
 }
-
 /**
 * gets a specific attribute
  * @param {string} attName attribute name
@@ -71,7 +70,7 @@ export function getModuleInstancesBySpecifiedAttribute(attName, attValue){
  * @returns {XPathResult}
 **/
 export function getModuleParamsByModuleName(moduleName){
-    xPath = "//module[@name='"+moduleName+"']/param";
+    xPath = "//module[@name='"+ moduleName +"']/param";
     return evaluateXPATH(xPath, APICalls.getAllModules());
 }
 
@@ -107,12 +106,67 @@ export function getAllSavedProcesses(){
 }
 
 /**
+ * gets names of historical processes
+ * */
+
+export function getAllHistoricalProcesses(){
+    xPath = "//process/@name";
+    return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
+}
+
+
+/**
  * gets IDs of saved processes
  * */
 
 export function getAllProcessesIDs(){
     xPath = "//process/@id";
     return evaluateXPATH(xPath,APICalls.getAllSavedProcesses());
+}
+/**
+ * gets IDs of saved processes
+ * */
+
+export function getProcessIDByProcessesName(name){
+    xPath = "string(//process[@name='" + name + "']/@id)";
+    return evaluateXPATH(xPath,APICalls.getAllSavedProcesses());
+}
+/**
+ * gets IDs of historical processes
+ * */
+
+export function getAllHistoricalProcessesIDs(){
+    xPath = "//process/@id";
+    return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
+}
+
+/**
+ * gets finished times of historical processes
+ * */
+
+export function getAllHistoricalProcessesFinishedTimesByProcessId(id){
+    xPath = "//process[@id=\""+id+"\"]//time_finished";
+    return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
+}
+
+/**
+ * gets Status of historical processes
+ * */
+
+export function getHistoricalProcessesById(id){
+    xPath = "//process[@id=\""+id+"\"]";
+    return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
+}
+
+export function getHistoricalProcessModulesByProcessNameAndTime(pName, pTime){
+    xPath = "//process[@name="+pName+" and @finished="+pTime+"]/*";
+    return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
+}
+
+export function getHistoricalProcessModuleInstancesByProcessId(id){
+    xPath = "//process[@id=\""+id+"\"]/*";
+    return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
+
 }
 
 /**
