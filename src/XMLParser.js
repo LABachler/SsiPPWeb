@@ -1,7 +1,11 @@
 
 import * as APICalls from './APICalls.js';
 let xPath;
-
+/**
+ *
+ * @param text
+ * @return {Document}
+ */
 
 /**
  * universal xmlParser
@@ -158,9 +162,9 @@ export function getHistoricalProcessesById(id){
     return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
 }
 
-export function getRunningProcessModuleInstances(){
+export function getRunningProcessModuleInstances(id){
     xPath = "//process/*";
-    return evaluateXPATH(xPath,APICalls.getRunningProcess());
+    return evaluateXPATH(xPath,APICalls.getRunningProcess(id));
 }
 
 export function getHistoricalProcessModuleInstancesByProcessId(id){

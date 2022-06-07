@@ -3,7 +3,7 @@ let attempt = 3; // Variable to count number of attempts.
 function validate(){
     let username = document.getElementById("floatingInput").value;
     let password = document.getElementById("floatingPassword").value;
-    if ( username === "naida@gmail.com" && password === "12345"){
+    if ( username === "diplomarbeit" && password === "NLB2022"){
         document.location.href = "SsiPP.html"
         alert ("Login successfully");
     }

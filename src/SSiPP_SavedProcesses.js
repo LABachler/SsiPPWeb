@@ -2,18 +2,29 @@ import * as XMLParser from './XMLParser.js';
 import * as APICalls from "./APICalls.js";
 
 /**
- * gets all process names and adds them to a side sub-menu
- * */
-
-let processesSubMenu = document.getElementById("pageSubmenu");  //list of all saved processes
+ * submenu of saved processes
+ * @type {HTMLElement}
+ */
+let processesSubMenu = document.getElementById("pageSubmenu");
+/**
+ * @type {XPathResult}
+ * all saved process names
+ */
 let processesNames = XMLParser.getAllSavedProcesses();
 let processName = null;
+/**
+ * name of a started process
+ */
 let runProcessName;
+/**
+ * running processes submenu
+ * @type {HTMLElement}
+ */
 let nowRunningMenuItem = document.getElementById('nowRunning');
 
+let intervals = [];
+
 nowRunningMenuItem.addEventListener("click", function() {
-    let nowRunning = true;
-    showData(runProcessName,nowRunning);
 })
 
 while(processName = processesNames.iterateNext()){
@@ -55,6 +66,21 @@ function showData(processName, nowRunning) {
     let headerProcessName = createElement('h2', 'h2');
     headerProcessName.innerHTML = processName;
 
+    let scaleLabel = createElement('label', 'labels');
+    scaleLabel.innerHTML = "Scale";
+
+    let scaleInput = createElement('select', 'selects');
+    scaleInput.id = "processScale";
+    let i = 0.2;
+    while(i<=2){
+        let option = document.createElement('option');
+        let name = document.createElement('a');
+        option.appendChild(name);
+        name.innerText = i.toFixed(1).toString();
+        scaleInput.appendChild(option);
+        i+=0.2;
+    }
+
     let startProcessButton = createElement('button', "btn-dark");
     let buttonText;
 
@@ -66,23 +92,31 @@ function showData(processName, nowRunning) {
     startProcessButton.innerText = buttonText;
 
     startProcessButton.addEventListener('click', function () {
+        console.log(" scale=\""+scaleInput.options[scaleInput.selectedIndex].text+"\"");
+
         if (buttonText === "STOP") {
             buttonText = "START";
             document.getElementById("" + processName).click();
             document.getElementById("savedProcesses").click();
         } else {
+            //TODO: add menu items for started processes
             buttonText = "STOP";
             runProcessName = processName;
+            let liItem = document.createElement("li");
+            let paramText = document.createTextNode(runProcessName);
+            let aItem = document.createElement("a");
+            aItem.appendChild(paramText);
+            liItem.appendChild(aItem);
+            document.getElementById('nowRunning').appendChild(liItem);
             let runProcessID = XMLParser.getProcessIDByProcessesName(processName);
 
-            document.getElementById("savedProcesses").click();
-            document.getElementById('nowRunning').click();
+            //document.getElementById("savedProcesses").click();
+            //document.getElementById('nowRunning').click();
 
-            console.log("<startProcess id=\"" + runProcessID.stringValue + "\" command=\"START\"></startProcess>");
             $.ajax({
                 type: "POST",
                 url: APICalls.POST_API_URL_SET_PROCESS,
-                data: "<startProcess id=\"" + runProcessID.stringValue + "\" command=\"START\"/>",
+                data: "<startProcess id=\"" + runProcessID.stringValue + "\" command=\"START\" scale=\""+scaleInput.options[scaleInput.selectedIndex].text+"\"/>",
                 contentType: "text",
                 success: function (result) {
                     console.log(result);
@@ -91,35 +125,66 @@ function showData(processName, nowRunning) {
                     console.log(result);
                 }
             });
+
+
+            aItem.addEventListener('click', function (){
+                for(let i = 0; i < intervals.length; i++){
+                    clearInterval(intervals[i]);
+                }
+                let id = runProcessID;
+                $('.dataTable').empty();
+                insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
+                processModInstances = XMLParser.getRunningProcessModuleInstances(id.stringValue);
+                appendData(processModInstances,dataTable,nowRunning);
+                intervals.push(setInterval(function (){
+                    $('.dataTable').empty();
+                    insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
+                    processModInstances = XMLParser.getRunningProcessModuleInstances(id.stringValue);
+                    appendData(processModInstances,dataTable,true);
+                }, 15000))
+            })
+
         }
     });
 
     let divGrid = document.getElementById('tablePosition');
     divGrid.innerHTML = "";
 
+    /**
+     * @type {HTMLElement}
+     * table for a process
+     */
     let dataTable = createElement('table', 'dataTable');
     insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
 
-    divGrid.appendChild(headerProcessName);
-    //divGrid.appendChild(btnHideSidebarSP);
-    divGrid.appendChild(startProcessButton);
-    divGrid.appendChild(dataTable);
+    divGrid.append(headerProcessName,startProcessButton,scaleLabel,scaleInput,dataTable);
     let processModInstances;
+
     if (nowRunning === false){
         processModInstances = XMLParser.getProcessModuleInstancesByProcessName(processName);
         appendData(processModInstances, dataTable, nowRunning);
     }
-    else{
+    /*else{
+
         processModInstances = XMLParser.getRunningProcessModuleInstances();
+        appendData(processModInstances,dataTable,nowRunning);
         setInterval(function (){
-            $('#dataTable').empty();
+            $('.dataTable').empty();
+            insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
+            processModInstances = XMLParser.getRunningProcessModuleInstances();
             appendData(processModInstances,dataTable,nowRunning);
 
         }, 15000)
-    }
+    }*/
 
 }
 
+/**
+ * shows process data in a table form
+ * @param {XPathResult}processModInstances
+ * @param {HTMLTableElement}dataTable
+ * @param {Boolean}nowRunning
+ */
 export function appendData(processModInstances,
                            dataTable,
                            nowRunning){
@@ -127,7 +192,7 @@ export function appendData(processModInstances,
     let subTableReport = null;
     let pmInstance = null;
     while(pmInstance = processModInstances.iterateNext()){
-
+        console.log(pmInstance);
         let mainTableRow = dataTable.insertRow(-1);
         let cell = mainTableRow.insertCell(-1);
 
@@ -152,6 +217,7 @@ export function appendData(processModInstances,
 
                         if(nowRunning === true){
                             subTableReport = createSubTableReport();
+                            console.log("IS PARALLEL");
                         }
 
                         for(let j = 0; j < pmInstance.children[i].children[k].children.length; j++){
@@ -266,7 +332,6 @@ function createModuleInstanceTable(hasSubParallel,
 
     if(nowRunning === true){
         subTable.appendChild(subTableReport);
-        //createTableToggleFunction(subTable, subTableReport);
     }
 }
 
@@ -356,7 +421,6 @@ function createSubTableReport(){
  * @param {HTMLTableElement} subTable in this table we add a parameter table
  * */
 function createParamTable(pmInstance, subTable){
-
     let paramTable = document.createElement('table');
     let paramTableRow = subTable.insertRow(-1);
     let paramTableCell = paramTableRow.insertCell(-1);

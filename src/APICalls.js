@@ -97,16 +97,20 @@ export function getAllModuleInstances(){
 /**
  * @return {String} running process in an API
  * */
-export function getRunningProcess(){
+function startRunningProcessAPICall(id){
     $.ajax({
         async: false,
-        url: GET_API_URL_RUNNING_PROCESS,
+        url: GET_API_URL_RUNNING_PROCESS + "/"+id,
         type: "GET",
         dataType: "text",
         success: function (data) {
             console.log(data);
-            return data;
+            xmlRunningProcess = data;
         }
     });
 }
 
+export function getRunningProcess(id){
+    startRunningProcessAPICall(id);
+    return xmlRunningProcess;
+}

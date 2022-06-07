@@ -10,6 +10,7 @@
 }
 
 .moduleInstanceDiv{
+  padding-left: 200px;
   display: grid;
   color: white;
   grid-template-columns:20fr;

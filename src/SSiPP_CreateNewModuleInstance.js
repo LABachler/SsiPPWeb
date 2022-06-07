@@ -24,7 +24,8 @@ createNewModuleInstance.addEventListener("click", function (){
     divMain.innerHTML = "";
     $('.table').remove();
     $('#tablePosition').hide();
-    $('#tablePositionCreateProcess').show();
+    $('#tablePositionCreateProcess').hide();
+    //$('#selectModuleInstances').hide();
     $('#createModuleFieldset').hide();
     $('#createProcessField').hide();
     $('#moduleInstanceFrom').show();
