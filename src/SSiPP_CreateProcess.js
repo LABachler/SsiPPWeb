@@ -477,6 +477,7 @@ saveProcessButton.addEventListener('click', function () {
             console.log(result);
         }
     });
+    document.location.reload();
 
     }
     else

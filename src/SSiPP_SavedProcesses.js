@@ -17,9 +17,6 @@ let processName = null;
  */
 let runProcessName;
 
-let intervals = [];
-
-
 while(processName = processesNames.iterateNext()){
 
     let processNameStr = processName.value;
@@ -58,6 +55,7 @@ function showData(processName, nowRunning) {
 
     let headerProcessName = createElement('h2', 'h2');
     headerProcessName.innerHTML = processName;
+    headerProcessName.id = "processNameHeader";
 
     let scaleLabel = createElement('label', 'labels');
     scaleLabel.innerHTML = "Scale";
@@ -77,23 +75,17 @@ function showData(processName, nowRunning) {
     let startProcessButton = createElement('button', "btn-dark");
     let buttonText;
 
-    if (nowRunning)
-        buttonText = "STOP";
-    else
-        buttonText = "START";
+    startProcessButton.innerText = "START";
 
-    startProcessButton.innerText = buttonText;
 
     startProcessButton.addEventListener('click', function () {
-        console.log(" scale=\""+scaleInput.options[scaleInput.selectedIndex].text+"\"");
 
         if (buttonText === "STOP") {
-            buttonText = "START";
+            startProcessButton.innerText = "START";
             document.getElementById("" + processName).click();
             document.getElementById("savedProcesses").click();
         } else {
-            //TODO: add menu items for started processes
-            buttonText = "STOP";
+            startProcessButton.innerText = "STOP";
             runProcessName = processName;
             let liItem = document.createElement("li");
             let paramText = document.createTextNode(runProcessName);
@@ -102,9 +94,6 @@ function showData(processName, nowRunning) {
             liItem.appendChild(aItem);
             document.getElementById('runningProcessesPageSubmenu').appendChild(liItem);
             let runProcessID = XMLParser.getProcessIDByProcessesName(processName);
-
-            //document.getElementById("savedProcesses").click();
-            //document.getElementById('nowRunning').click();
 
             $.ajax({
                 type: "POST",
@@ -119,22 +108,29 @@ function showData(processName, nowRunning) {
                 }
             });
 
-
             aItem.addEventListener('click', function (){
-                for(let i = 0; i < intervals.length; i++){
-                    clearInterval(intervals[i]);
+                console.log(aItem.innerHTML);
+                let name = aItem.innerHTML;
+                document.getElementById("processNameHeader").innerHTML = name;
+                const interval_id = window.setInterval(function(){}, Number.MAX_SAFE_INTEGER);
+                for(let i = 0; i <= interval_id; i++){
+                    clearInterval(i);
                 }
                 let id = runProcessID;
                 $('.dataTable').empty();
-                insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
+                insertRowAndCellWithText(document.getElementsByClassName("dataTable").item(0), '▼ START ▼', 'noDataRow');
+
                 processModInstances = XMLParser.getRunningProcessModuleInstances(id.stringValue);
-                appendData(processModInstances,dataTable,nowRunning);
-                intervals.push(setInterval(function (){
+                appendData(processModInstances,nowRunning);
+
+                setInterval(function (){
+                    let finalTimes = XMLParser.getAllHistoricalProcessesFinishedTimesByProcessId(id.stringValue);
+                    checkIfProcessFinished(finalTimes);
                     $('.dataTable').empty();
-                    insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
+                    insertRowAndCellWithText(document.getElementsByClassName("dataTable").item(0), '▼ START ▼', 'noDataRow');
                     processModInstances = XMLParser.getRunningProcessModuleInstances(id.stringValue);
-                    appendData(processModInstances,dataTable,true);
-                }, 15000))
+                    appendData(processModInstances,true);
+                }, 15000);
             })
 
         }
@@ -155,7 +151,7 @@ function showData(processName, nowRunning) {
 
     if (nowRunning === false){
         processModInstances = XMLParser.getProcessModuleInstancesByProcessName(processName);
-        appendData(processModInstances, dataTable, nowRunning);
+        appendData(processModInstances,nowRunning);
     }
     /*else{
 
@@ -172,21 +168,22 @@ function showData(processName, nowRunning) {
 
 }
 
+function checkIfProcessFinished(moduleInstanceFinishedTimes){
+
+}
 /**
  * shows process data in a table form
  * @param {XPathResult}processModInstances
- * @param {HTMLTableElement}dataTable
  * @param {Boolean}nowRunning
  */
 export function appendData(processModInstances,
-                           dataTable,
                            nowRunning){
 
+    let dTable = document.getElementsByClassName("dataTable").item(0);
     let subTableReport = null;
     let pmInstance = null;
     while(pmInstance = processModInstances.iterateNext()){
-        console.log(pmInstance);
-        let mainTableRow = dataTable.insertRow(-1);
+        let mainTableRow = dTable.insertRow(-1);
         let cell = mainTableRow.insertCell(-1);
 
         cell.className = "mainCell";
@@ -268,9 +265,9 @@ export function appendData(processModInstances,
             }
         }
 
-        insertRowAndCellWithText(dataTable, '🢃', 'noDataRow');
+        insertRowAndCellWithText(dTable, '🢃', 'noDataRow');
     }
-    insertRowAndCellWithText(dataTable, 'END', 'noDataRow');
+    insertRowAndCellWithText(dTable, 'END', 'noDataRow');
 }
 
 /**
