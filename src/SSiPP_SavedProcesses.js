@@ -16,16 +16,9 @@ let processName = null;
  * name of a started process
  */
 let runProcessName;
-/**
- * running processes submenu
- * @type {HTMLElement}
- */
-let nowRunningMenuItem = document.getElementById('nowRunning');
 
 let intervals = [];
 
-nowRunningMenuItem.addEventListener("click", function() {
-})
 
 while(processName = processesNames.iterateNext()){
 
@@ -107,7 +100,7 @@ function showData(processName, nowRunning) {
             let aItem = document.createElement("a");
             aItem.appendChild(paramText);
             liItem.appendChild(aItem);
-            document.getElementById('nowRunning').appendChild(liItem);
+            document.getElementById('runningProcessesPageSubmenu').appendChild(liItem);
             let runProcessID = XMLParser.getProcessIDByProcessesName(processName);
 
             //document.getElementById("savedProcesses").click();
