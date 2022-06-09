@@ -41,7 +41,20 @@
     border: 1px solid transparent;
     width: 100%;
 }
+.historicalDataTable{
+    margin-left: 100px;
+    text-align: center;
+    border: 1px solid transparent;
+    width: 150%;
+}
 
+#divHistoricalProcesses{
+
+    text-align: left;
+}
+.h2{
+    border-color: #1a1e21;
+}
 .noDataRow {
     border-radius: 10px;
     background-color: rgba(79, 76, 76, 0.83);

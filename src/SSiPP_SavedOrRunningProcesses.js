@@ -6,17 +6,180 @@ import * as APICalls from "./APICalls.js";
  * @type {HTMLElement}
  */
 let processesSubMenu = document.getElementById("pageSubmenu");
+
+/**
+ * div with a grid layout
+ * @type {HTMLElement}
+ */
+let divGrid = document.getElementById('tablePosition');
+divGrid.innerHTML = "";
+
+/**
+ * @type {HTMLElement}
+ * table for a process
+ */
+let dataTable = createElement('table', 'dataTable');
 /**
  * @type {XPathResult}
  * all saved process names
  */
 let processesNames = XMLParser.getAllSavedProcesses();
+/**
+ * iterator for process names
+ */
 let processName = null;
 /**
  * name of a started process
  */
 let runProcessName;
+/**
+ * title of a process -
+ * class: h2 -
+ * id: processNameHeader
+ * @type {HTMLElement}
+ */
+let headerProcessName = createElement('h2', 'h2');
+headerProcessName.id = "processNameHeader";
 
+
+divGrid.append(headerProcessName,dataTable);
+/**
+ * ids of already running processes when opening the page
+ * @type {XPathResult}
+ */
+let runningProcessesIds = XMLParser.getRunningProcessesIds();
+/**
+ * iterator for already running process ids
+ */
+let rpIterator = null;
+
+while(rpIterator = runningProcessesIds.iterateNext()) {
+    /**
+     * id of a process
+     * @type {string}
+     */
+    let id = rpIterator.textContent;
+    /**
+     * name of a process
+     * @type {XPathResult}
+     */
+    let runningProcess = XMLParser.getRunningProcessName(rpIterator.textContent);
+    /**
+     * running process name iterator
+     */
+    let nameIterator = null;
+
+    /**
+     * for every running process make a submenu item in "now running" menu item
+     * and add an event listener
+     */
+    while(nameIterator = runningProcess.iterateNext()){
+        let liItem = document.createElement("li");
+        let paramText = document.createTextNode(nameIterator.value);
+        let aItem = document.createElement("a");
+        liItem.id = "listItem"+ nameIterator.value;
+        aItem.appendChild(paramText);
+        liItem.appendChild(aItem);
+        document.getElementById('runningProcessesPageSubmenu').appendChild(liItem);
+
+        aItem.addEventListener('click', function (){
+            configureThePage();
+            let stopProcessButton = createElement('button', "btn-dark");
+            stopProcessButton.id="stopButton";
+            stopProcessButton.innerText = "STOP";
+            divGrid.append(stopProcessButton);
+
+            stopProcessButton.addEventListener('click', function () {
+                $.ajax({
+                    type: "POST",
+                    url: APICalls.POST_API_URL_SET_PROCESS,
+                    data: "<startProcess id=\"" + id + "\" command=\"STOP\"/>",
+                    contentType: "text",
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                });
+                document.location.reload();
+            });
+            createRunningProcessItemListener(aItem.innerText, id);
+        })
+    }
+
+
+}
+
+function configureThePage(){
+
+    $('select').remove();
+    $('label').hide();
+    $('fieldset').hide();
+    $('#tablePosition').show();
+    $('#tablePositionCreateProcess').hide();
+    $('.table').remove();
+    $('.dataTable').empty();
+    $('#startButton').remove();
+    $('#stopButton').remove();
+}
+/**
+ * @param {String} name
+ * @param {String} id
+ */
+function createRunningProcessItemListener(name,id){
+    document.getElementById("processNameHeader").innerHTML = name;
+
+    /**
+     * new interval without a function
+     * used only to find max interval id to stop all intervals
+     * @type {number}
+     */
+    const interval_id = window.setInterval(function(){}, Number.MAX_SAFE_INTEGER);
+    for(let i = 0; i <= interval_id; i++){
+        clearInterval(i);
+    }
+
+    /**
+     * empty the table before inserting the data in it
+     */
+    $('.dataTable').empty();
+
+    insertRowAndCellWithText(document.getElementsByClassName("dataTable").item(0), '▼ START ▼', 'noDataRow');
+
+    /**
+     * module instances of a process
+     * @type {XPathResult}
+     */
+    let processModInstances = XMLParser.getRunningProcessModuleInstances(id);
+    appendData(processModInstances,true, false);
+
+    /**
+     * sets a 15sec interval to update the data in a table of a running process
+     * @type {number}
+     */
+    let interval = setInterval(function (){
+
+        /**
+         * if a process is done stop the interval and delete the menu item
+         */
+        if(APICalls.getRunningProcess(id) === "DONE"){
+            clearInterval(interval);
+            $(".listItem"+name).remove();
+        }
+
+        $('.dataTable').empty();
+        insertRowAndCellWithText(document.getElementsByClassName("dataTable").item(0), '▼ START ▼', 'noDataRow');
+        processModInstances = XMLParser.getRunningProcessModuleInstances(id);
+        appendData(processModInstances,true, false);
+    }, 15000);
+
+}
+
+/**
+ * show all saved processes as submenu items in a "saved processes" menu item
+ * and add an event listener to them
+ */
 while(processName = processesNames.iterateNext()){
 
     let processNameStr = processName.value;
@@ -29,7 +192,7 @@ while(processName = processesNames.iterateNext()){
     aItem.className = 'savedProcessesList'
 
     aItem.addEventListener("click", function (){
-        showData(processNameStr, false);
+        showData(processNameStr, false, false);
     })
 
     aItem.appendChild(paramText);
@@ -42,24 +205,29 @@ while(processName = processesNames.iterateNext()){
  * @param {string} processName name of a process
  * @param {boolean} nowRunning is the process running or not
  * */
-function showData(processName, nowRunning) {
+export function showData(processName, nowRunning, historical) {
 
-    //clear div
-    $('select').remove();
-    $('label').hide();
-    //$('button').remove();
-    $('fieldset').hide();
-    $('#tablePosition').show();
-    $('#tablePositionCreateProcess').hide();
-    $('.table').remove();
+    configureThePage();
 
-    let headerProcessName = createElement('h2', 'h2');
+    if(historical ===false)
+        $('.historicalDataTable').remove();
+
+    if(nowRunning === false){
+        const interval_id = window.setInterval(function(){}, Number.MAX_SAFE_INTEGER);
+        for(let i = 0; i <= interval_id; i++){
+            clearInterval(i);
+        }
+    }
+
     headerProcessName.innerHTML = processName;
-    headerProcessName.id = "processNameHeader";
-
     let scaleLabel = createElement('label', 'labels');
     scaleLabel.innerHTML = "Scale";
+    scaleLabel.id = "labelScale";
 
+    /**
+     * select element with scale values in increments of 0.2
+     * used to multiply or divide the weight of a baked product from a process
+     */
     let scaleInput = createElement('select', 'selects');
     scaleInput.id = "processScale";
     let i = 0.2;
@@ -73,116 +241,110 @@ function showData(processName, nowRunning) {
     }
 
     let startProcessButton = createElement('button', "btn-dark");
-    let buttonText;
-
+    startProcessButton.id="startButton";
     startProcessButton.innerText = "START";
 
+    let runningProcessItems = document.getElementById('runningProcessesPageSubmenu');
+    for(let children = 0; children < runningProcessItems.children.length; children++){
+        if(runningProcessItems.children[children].textContent === processName)
+            startProcessButton.disabled = "true";
+    }
 
     startProcessButton.addEventListener('click', function () {
 
-        if (buttonText === "STOP") {
-            startProcessButton.innerText = "START";
-            document.getElementById("" + processName).click();
-            document.getElementById("savedProcesses").click();
-        } else {
-            startProcessButton.innerText = "STOP";
-            runProcessName = processName;
-            let liItem = document.createElement("li");
-            let paramText = document.createTextNode(runProcessName);
-            let aItem = document.createElement("a");
-            aItem.appendChild(paramText);
-            liItem.appendChild(aItem);
-            document.getElementById('runningProcessesPageSubmenu').appendChild(liItem);
-            let runProcessID = XMLParser.getProcessIDByProcessesName(processName);
+        let runProcessID = XMLParser.getProcessIDByProcessesName(processName);
+        startProcessButton.innerText = "STOP";
+        runProcessName = processName;
+        let liItem = document.createElement("li");
+        let paramText = document.createTextNode(runProcessName);
+        let aItem = document.createElement("a");
+        liItem.id = "listItem"+ runProcessName;
+        aItem.appendChild(paramText);
+        liItem.appendChild(aItem);
+        document.getElementById('runningProcessesPageSubmenu').appendChild(liItem);
 
-            $.ajax({
-                type: "POST",
-                url: APICalls.POST_API_URL_SET_PROCESS,
-                data: "<startProcess id=\"" + runProcessID.stringValue + "\" command=\"START\" scale=\""+scaleInput.options[scaleInput.selectedIndex].text+"\"/>",
-                contentType: "text",
-                success: function (result) {
-                    console.log(result);
-                },
-                error: function (result) {
-                    console.log(result);
-                }
+        /**
+         * send process is, command and scale to the server to start the process
+         */
+        $.ajax({
+            type: "POST",
+            url: APICalls.POST_API_URL_SET_PROCESS,
+            data: "<startProcess id=\"" + runProcessID.stringValue + "\" command=\"START\" scale=\""+scaleInput.options[scaleInput.selectedIndex].text+"\"/>",
+            contentType: "text",
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (result) {
+                console.log(result);
+            }
+        });
+
+        aItem.addEventListener('click', function (){
+            let stopProcessButton = createElement('button', "btn-dark");
+            stopProcessButton.id="stopButton";
+            stopProcessButton.innerText = "STOP";
+            divGrid.append(stopProcessButton);
+            $("#startButton").remove();
+            $('#processScale').remove();
+            $('#labelScale').remove();
+            stopProcessButton.addEventListener('click', function () {
+                $.ajax({
+                    type: "POST",
+                    url: APICalls.POST_API_URL_SET_PROCESS,
+                    data: "<startProcess id=\"" + runProcessID.stringValue + "\" command=\"STOP\"/>",
+                    contentType: "text",
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                });
+                document.location.reload();
             });
+            createRunningProcessItemListener(aItem.innerText, runProcessID.stringValue);
+        })
 
-            aItem.addEventListener('click', function (){
-                console.log(aItem.innerHTML);
-                let name = aItem.innerHTML;
-                document.getElementById("processNameHeader").innerHTML = name;
-                const interval_id = window.setInterval(function(){}, Number.MAX_SAFE_INTEGER);
-                for(let i = 0; i <= interval_id; i++){
-                    clearInterval(i);
-                }
-                let id = runProcessID;
-                $('.dataTable').empty();
-                insertRowAndCellWithText(document.getElementsByClassName("dataTable").item(0), '▼ START ▼', 'noDataRow');
-
-                processModInstances = XMLParser.getRunningProcessModuleInstances(id.stringValue);
-                appendData(processModInstances,nowRunning);
-
-                setInterval(function (){
-                    let finalTimes = XMLParser.getAllHistoricalProcessesFinishedTimesByProcessId(id.stringValue);
-                    checkIfProcessFinished(finalTimes);
-                    $('.dataTable').empty();
-                    insertRowAndCellWithText(document.getElementsByClassName("dataTable").item(0), '▼ START ▼', 'noDataRow');
-                    processModInstances = XMLParser.getRunningProcessModuleInstances(id.stringValue);
-                    appendData(processModInstances,true);
-                }, 15000);
-            })
-
-        }
     });
-
-    let divGrid = document.getElementById('tablePosition');
-    divGrid.innerHTML = "";
-
-    /**
-     * @type {HTMLElement}
-     * table for a process
-     */
-    let dataTable = createElement('table', 'dataTable');
     insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
 
-    divGrid.append(headerProcessName,startProcessButton,scaleLabel,scaleInput,dataTable);
+    divGrid.append(startProcessButton,scaleLabel,scaleInput);
     let processModInstances;
 
     if (nowRunning === false){
         processModInstances = XMLParser.getProcessModuleInstancesByProcessName(processName);
-        appendData(processModInstances,nowRunning);
+        appendData(processModInstances,nowRunning, historical);
     }
-    /*else{
-
-        processModInstances = XMLParser.getRunningProcessModuleInstances();
-        appendData(processModInstances,dataTable,nowRunning);
-        setInterval(function (){
-            $('.dataTable').empty();
-            insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
-            processModInstances = XMLParser.getRunningProcessModuleInstances();
-            appendData(processModInstances,dataTable,nowRunning);
-
-        }, 15000)
-    }*/
 
 }
 
-function checkIfProcessFinished(moduleInstanceFinishedTimes){
-
-}
 /**
  * shows process data in a table form
  * @param {XPathResult}processModInstances
  * @param {Boolean}nowRunning
+ * @param {boolean} historical
  */
 export function appendData(processModInstances,
-                           nowRunning){
+                           nowRunning,
+                           historical){
+    let dTable;
+    if(historical === false)
+        dTable = document.getElementsByClassName("dataTable").item(0);
+    else
+        dTable = document.getElementsByClassName("historicalDataTable").item(0);
 
-    let dTable = document.getElementsByClassName("dataTable").item(0);
+    /**
+     * report names and values table
+     * @type {HTMLTableElement}
+     */
     let subTableReport = null;
+    /**
+     * process module instance iterator
+     */
     let pmInstance = null;
+
     while(pmInstance = processModInstances.iterateNext()){
+
         let mainTableRow = dTable.insertRow(-1);
         let cell = mainTableRow.insertCell(-1);
 
@@ -207,7 +369,6 @@ export function appendData(processModInstances,
 
                         if(nowRunning === true){
                             subTableReport = createSubTableReport();
-                            console.log("IS PARALLEL");
                         }
 
                         for(let j = 0; j < pmInstance.children[i].children[k].children.length; j++){

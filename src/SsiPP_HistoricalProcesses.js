@@ -1,7 +1,7 @@
 
 import * as XMLParser from './XMLParser.js';
-import * as SSiPP_SavedProcesses from './SSiPP_SavedProcesses.js';
-import {createElement} from "./SSiPP_SavedProcesses.js";
+import * as SSiPP_SavedProcesses from './SSiPP_SavedOrRunningProcesses.js';
+import {createElement} from "./SSiPP_SavedOrRunningProcesses.js";
 
 let historicalProcesses = document.getElementById("historicalProcesses");
 let tablePosition = document.getElementById("wrapper");
@@ -14,6 +14,7 @@ historicalProcesses.addEventListener('click', function(){
     $('#createProcessField').hide();
     $('#moduleInstanceFrom').hide();
     $('.table').remove();
+    $('.moduleInstanceDiv').hide();
     let parseNames = XMLParser.getAllHistoricalProcesses();
     let parseIDs = XMLParser.getAllHistoricalProcessesIDs();
 
@@ -23,6 +24,7 @@ historicalProcesses.addEventListener('click', function(){
     table.id = "history";
     table.className = 'table table-hover table-dark';
     tablePosition.appendChild(table);
+
     let tableHeaders = [ "Process_ID", "Process_Name", "Time Finished"];
     let tableHeader = document.createElement("thead");
     let tableHeaderRow = document.createElement("tr");
@@ -47,8 +49,7 @@ historicalProcesses.addEventListener('click', function(){
         tableRow.id = trNr.toString() + "row";
         let tableCell = tableRow.insertCell();
         tableCell.innerText = iDIterator.value;
-        ids.push(iDIterator.value)
-        console.log(iDIterator.value);
+        ids.push(iDIterator.value);
         trNr++;
     }
     trNr = 0;
@@ -59,7 +60,6 @@ historicalProcesses.addEventListener('click', function(){
         trNr++;
     }
     for(let i = 0; i < ids.length; i++){
-        console.log(ids[i]);
         let times = [];
         let parseTimeFinished = XMLParser.getAllHistoricalProcessesFinishedTimesByProcessId(ids[i]);
         let iterator = null;
@@ -72,19 +72,21 @@ historicalProcesses.addEventListener('click', function(){
     $("body").on("click", "#history tr", function () {
         $("#history").hide();
         $("#tablePosition").hide();
+        $('#divHistoricalProcesses').remove();
         let divHistoricalProcess = document.createElement("div");
-        divHistoricalProcess.id = "div";
+        divHistoricalProcess.id = "divHistoricalProcesses";
         tablePosition.appendChild(divHistoricalProcess);
         console.log($(this).index());
-        let dataTable = createElement('table', 'dataTable');
+        let dataTable = createElement('table', 'historicalDataTable');
         let processModInstances = XMLParser.getHistoricalProcessModuleInstancesByProcessId($(this).children()[0].innerText);
-        let headerProcessName = createElement('h2', 'h2');
+        let headerProcessName = createElement('h3', 'h2');
         headerProcessName.innerHTML = $(this).children()[1].innerText;
         divHistoricalProcess.append(headerProcessName, dataTable);
-        SSiPP_SavedProcesses.appendData(processModInstances,dataTable,true);
+        SSiPP_SavedProcesses.appendData(processModInstances,true, true);
     });
-    $("body").on("click", "#div", function () {
+    $("body").on("click", "#divHistoricalProcesses", function () {
         this.remove();
+        $('.h3').remove();
         $("#history").show();
     });
 

@@ -18,6 +18,8 @@ export const POST_API_URL_SET_PROCESS =
     "http://localhost:7000/SSiPP/running_process";
 export const GET_API_URL_RUNNING_PROCESS =
     "http://localhost:7000/SSiPP/get_running_process";
+export const GET_API_URL_RUNNING_PROCESSES =
+    "http://localhost:7000/SSiPP/currently_running_processes";
 
 
 
@@ -26,6 +28,7 @@ let xmlModules;
 let xmlProcesses;
 let xmlHistoricalProcesses;
 let xmlRunningProcess;
+let xmlRunningProcesses;
 
 $.ajax({
     async: false,
@@ -69,6 +72,17 @@ $.ajax({
 });
 
 
+$.ajax({
+    async: false,
+    url: GET_API_URL_RUNNING_PROCESSES,
+    type: "GET",
+    dataType: "text",
+    success: function (data) {
+        console.log(data);
+        xmlRunningProcesses = data;
+    }
+});
+
 /**
  * @return {String} last saved processes in an API
  * */
@@ -104,13 +118,17 @@ function startRunningProcessAPICall(id){
         type: "GET",
         dataType: "text",
         success: function (data) {
-            console.log(data);
             xmlRunningProcess = data;
         }
     });
 }
 
+
 export function getRunningProcess(id){
     startRunningProcessAPICall(id);
     return xmlRunningProcess;
+}
+
+export function getRunningProcesses(){
+    return xmlRunningProcesses;
 }

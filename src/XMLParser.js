@@ -58,17 +58,6 @@ export function getModuleInstanceByModuleInstanceName(miName) {
     return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
 }
 /**
-* gets a specific attribute
- * @param {string} attName attribute name
- * @param {string} attValue
- * @returns {XPathResult}
-* */
-export function getModuleInstancesBySpecifiedAttribute(attName, attValue){
-    xPath = "//module_instance[@"+attName+"='"+attValue+"']"
-    return evaluateXPATH(xPath, APICalls.getAllModuleInstances());
-}
-
-/**
 * gets all module parameters with its name
  * @param {string} moduleName module name
  * @returns {XPathResult}
@@ -90,15 +79,6 @@ export function getModuleReportByModuleName(modName) {
     return xmlDoc.evaluate(xPath, xmlDoc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 }
 
-/**
- * @param {string} nodeName name of a node for which we need attributes
- * @returns {XPathResult}
- * */
-
-export function getNodeAttributes(nodeName){
-    xPath = "//"+nodeName+"/@*";
-    return evaluateXPATH(xPath, APICalls.getAllModules());
-}
 
 /**
 * gets names of saved processes
@@ -167,6 +147,10 @@ export function getRunningProcessModuleInstances(id){
     return evaluateXPATH(xPath,APICalls.getRunningProcess(id));
 }
 
+export function getRunningProcessName(id){
+    xPath = "//process/@name";
+    return evaluateXPATH(xPath,APICalls.getRunningProcess(id));
+}
 export function getHistoricalProcessModuleInstancesByProcessId(id){
     xPath = "//process[@id=\""+id+"\"]/*";
     return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
@@ -201,13 +185,10 @@ export function getProcessModuleInstancesByProcessName(pName){
     return evaluateXPATH(xPath,APICalls.getAllSavedProcesses());
 }
 
-/**
- * @param {string} str
- * @param {number} index
- * @param {string} stringToAdd
- */
-export function addStr(str, index, stringToAdd){
-    return str.substring(0, index) + stringToAdd + str.substring(index, str.length);
+export function getRunningProcessesIds(){
+    xPath = "/runningProcesses/*";
+    return evaluateXPATH(xPath,APICalls.getRunningProcesses());
 }
+
 
 
