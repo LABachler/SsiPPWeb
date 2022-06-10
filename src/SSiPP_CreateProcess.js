@@ -2,8 +2,6 @@
  * enables a user to create a new process
  * @author Naida Ciric
  * @version 5
- * @class XMLParser.js
- * @class APICalls.js
  * */
 import * as XMLParser from './XMLParser.js';
 import * as APICalls from './APICalls.js';
@@ -513,7 +511,6 @@ function appendParametersAndReportValues(moduleInstanceText,moduleInstanceType){
     while(param = moduleParams.iterateNext()){
         paramToBeFilled.push(param);
         parameterNames.push(param.getAttribute("name"));
-        //paramNr++;
     }
 
     for(let i = 0; i < paramToBeFilled.length; i++){
@@ -562,11 +559,14 @@ function findMaxProcessId(){
      */
     let existingProcessesIDs = XMLParser.getAllProcessesIDs();
     let processIDIterator = null;
+    /**
+     * id of a process to be returned
+     * @type {number}
+     */
     let maxID=0;
 
     while(processIDIterator = existingProcessesIDs.iterateNext()){
         if(parseInt(processIDIterator.value) > maxID){
-            console.log(processIDIterator.value)
             maxID = parseInt(processIDIterator.value);
         }
     }
@@ -576,7 +576,7 @@ function findMaxProcessId(){
 
 /**
  * checks if all fields in a form are filled and if not returns false
- * @return {boolean} isValid
+ * @return {boolean} isValid - true if all input fields are filled out
  */
 function validateForm() {
     let isValid = true;

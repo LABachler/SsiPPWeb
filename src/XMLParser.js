@@ -142,15 +142,28 @@ export function getHistoricalProcessesById(id){
     return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
 }
 
+/**
+ * @param id
+ * @return {XPathResult}
+ */
 export function getRunningProcessModuleInstances(id){
     xPath = "//process/*";
     return evaluateXPATH(xPath,APICalls.getRunningProcess(id));
 }
 
+/**
+ * @param id
+ * @return {XPathResult}
+ */
 export function getRunningProcessName(id){
     xPath = "//process/@name";
     return evaluateXPATH(xPath,APICalls.getRunningProcess(id));
 }
+
+/**
+ * @param id
+ * @return {XPathResult}
+ */
 export function getHistoricalProcessModuleInstancesByProcessId(id){
     xPath = "//process[@id=\""+id+"\"]/*";
     return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());
@@ -185,6 +198,9 @@ export function getProcessModuleInstancesByProcessName(pName){
     return evaluateXPATH(xPath,APICalls.getAllSavedProcesses());
 }
 
+/**
+ * @return {XPathResult}
+ */
 export function getRunningProcessesIds(){
     xPath = "/runningProcesses/*";
     return evaluateXPATH(xPath,APICalls.getRunningProcesses());

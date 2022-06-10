@@ -1,5 +1,6 @@
-document.getElementById('logOut').addEventListener("click", function() {
 
+
+document.getElementById('logOut').addEventListener("click", function() {
     document.location.href = "index.html"
 })
 

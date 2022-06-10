@@ -2,40 +2,42 @@
 import * as XMLParser from "./XMLParser.js";
 import * as APICalls from "./APICalls.js";
 
+/**
+ * "+ module instance" menu item
+ * @type {HTMLElement}
+ */
 let createNewModuleInstance = document.getElementById("createModuleInstance");
+/**
+ *
+ * @type {HTMLDivElement}
+ */
 let divMain = document.createElement("div");
-divMain.className = "moduleInstanceDiv";//document.getElementById("tablePositionCreateProcess");
+divMain.className = "moduleInstanceDiv";
+/**
+ *
+ * @type {HTMLElement}
+ */
 let wrapper = document.getElementById("wrapper");
 wrapper.appendChild(divMain);
+/**
+ *
+ * @type {array}
+ */
 let paramIds = [];
 
 createNewModuleInstance.addEventListener("click", function (){
-    /*let btnHideSB = document.createElement('button');
-    btnHideSB.innerHTML = '☰';
-    btnHideSB.className = "btn-dark";
-    btnHideSB.type = "button";
-    btnHideSB.id = 'sidebarCollapseButton';
 
-    $(document).ready(function () {
-        $('#sidebarCollapseButton').on('click', function () {
-            $('#sidebar').toggleClass('active');
-        });
-    });*/
     divMain.innerHTML = "";
     $('.table').remove();
     $('#tablePosition').hide();
     $('#tablePositionCreateProcess').hide();
-    //$('#selectModuleInstances').hide();
     $('#createModuleFieldset').hide();
     $('#createProcessField').hide();
     $('#moduleInstanceFrom').show();
     $('.moduleInstanceDiv').show();
     $('#saveModule').hide();
-    /**
-     * select menu with all modules
-     * */
 
-    //divMain.appendChild(btnHideSB);
+
     let selectWrapper = document.createElement("div");
     let moduleNames = XMLParser.getAllModuleNames();
     let selectModules = document.createElement("select");
@@ -80,41 +82,34 @@ createNewModuleInstance.addEventListener("click", function (){
 
 })
 
+/**
+ * @param {String} type of module
+ * @return {HTMLFormElement} form
+ */
 function createField(type){
 
     paramIds = [];
     $('#moduleInstanceForm').remove();
-    let formMain = document.createElement("form");//main form where all module instances are appended
-    formMain.id = "moduleInstanceForm";
+    let formMain = document.createElement("form");
     let divForm = document.createElement("div");
     let fieldsetMain = document.createElement("fieldset");
     let legendFieldName = document.createElement("legend");
-    //let lblModuleInstanceName = document.createElement("label");
-    //let inpModuleInstanceName = document.createElement("input");
     let fieldsetMIParameter = document.createElement("fieldset");
     let legendParameter = document.createElement("legend");
+    let pBreakLine = document.createElement("p");
+
+    formMain.id = "moduleInstanceForm";
     fieldsetMIParameter.id ="createModuleInstanceParameterFieldset";
     fieldsetMIParameter.className ="fieldset";
-    let pBreakLine = document.createElement("p");
     fieldsetMIParameter.append(legendParameter, pBreakLine);
     legendParameter.innerHTML = "Module Instance Parameters";
     legendParameter.style.fontSize = "15px";
-
-
     fieldsetMain.className = "fieldset";
     fieldsetMain.id ="createModuleInstanceField";
     legendFieldName.innerHTML = type;
-    legendFieldName.className = "labels"
-    //lblModuleInstanceName.innerHTML = "Name a module instance";
-    //lblModuleInstanceName.className = "labels"
-    //divMain.className = "divMain";
-    //inpModuleInstanceName.className = "form-control";
-    //inpModuleInstanceName.id = "inpModuleInstanceName";
-    //inpModuleInstanceName.value = type + "-";
+    legendFieldName.className = "labels";
 
     fieldsetMain.appendChild(legendFieldName);
-    //fieldsetMain.appendChild(lblModuleInstanceName);
-    //fieldsetMain.appendChild(inpModuleInstanceName);
     divForm.appendChild(fieldsetMain);
     divMain.appendChild(divForm);
 
@@ -131,8 +126,11 @@ function createField(type){
 
         fieldsetMIParameter.append(document.createElement("p"),lbl,inp);
     }
-    //<module_instance type="DOS-LINE" plc="192.168.1.1" name="DOS-LINE-WATER" datablock_name="DB-1" line_id="1"/>
 
+    /**
+     * saves a module instance and sends an api POST call
+     * @type {HTMLButtonElement}
+     */
     let btnSave = document.createElement('button');
     btnSave.innerHTML = 'Save';
     btnSave.className = "btn-dark";
@@ -147,8 +145,11 @@ function createField(type){
                     +"\" datablock_name=\"" + document.getElementById(paramIds[1]).value
                     +"\" driver=\"" + document.getElementById(paramIds[2]).value
                     +"\" line_id=\"" + document.getElementById(paramIds[3]).value +"\"/>"
-                console.log(xmlString);
+
                 xmlModuleInstancePOSTApi(xmlString);
+                /**
+                 * is successfully saved removes the form
+                 */
                 $('#moduleInstanceForm').remove();
             }
             else
@@ -161,6 +162,10 @@ function createField(type){
 
 }
 
+/**
+ * sends an api POST call
+ * @param {String} xmlString new module instance xml string
+ */
 function xmlModuleInstancePOSTApi(xmlString){
     $.ajax({
         type: "POST",
@@ -177,7 +182,10 @@ function xmlModuleInstancePOSTApi(xmlString){
 
 }
 
-
+/**
+ * checks if all input fields are filled out
+ * @return {boolean}
+ */
 function validateForm() {
     let isValid = true;
     $('.form-control').each(function() {
