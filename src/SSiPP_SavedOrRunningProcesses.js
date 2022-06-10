@@ -204,6 +204,7 @@ while(processName = processesNames.iterateNext()){
  * builds a whole process flow table
  * @param {string} processName name of a process
  * @param {boolean} nowRunning is the process running or not
+ * @param {boolean} historical is the process as historical process saved or not
  * */
 export function showData(processName, nowRunning, historical) {
 
@@ -620,14 +621,3 @@ function createReportValuesTable(pmInstance, subTable){
     reportTableCell.appendChild(reportTable)
 }
 
-/**
- * for the purpose of animating a current running module instance
- * changes a class name to add an animation to a table
- * @param {string} tableID id of a table whose class needs to be changed
- * @param {string} newClassName a class name to be added
- * */
-function changeClassOfATable(tableID, newClassName){
-    let oldClassName = $('#'+tableID).className;
-    $('#'+tableID).removeClass(oldClassName);
-    $('#'+tableID).addClass(newClassName);
-}
