@@ -253,7 +253,6 @@ export function showData(processName, nowRunning, historical) {
     startProcessButton.addEventListener('click', function () {
 
         let runProcessID = XMLParser.getProcessIDByProcessesName(processName);
-        startProcessButton.innerText = "STOP";
         runProcessName = processName;
         let liItem = document.createElement("li");
         let paramText = document.createTextNode(runProcessName);
@@ -304,6 +303,7 @@ export function showData(processName, nowRunning, historical) {
             });
             createRunningProcessItemListener(aItem.innerText, runProcessID.stringValue);
         })
+        document.location.reload();
 
     });
     insertRowAndCellWithText(dataTable, '▼ START ▼', 'noDataRow');
