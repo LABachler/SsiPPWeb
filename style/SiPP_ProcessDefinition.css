@@ -1,0 +1,233 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+
+html,body,svg {
+    position: sticky;
+    width: 100%;
+    height: 105px;
+    margin: 0; padding: 0;
+    display: flow-root;
+    background-color: #383535;
+}
+
+#p {
+    fill: black;
+    fill-opacity: 0.2;
+    stroke: white;
+    stroke-width: 2.3px;
+    stroke-dasharray: 200 188.5;
+    animation: stroke-color 11s infinite linear;
+}
+#p .wrapperBkg, #p use {
+    animation: draw 4s infinite linear;
+}
+#p use:nth-child(3){
+    fill: white;
+    fill-opacity: 0.1;
+    animation-delay: -2s;
+}
+
+:root {
+    animation: back-color 11s infinite linear;
+}
+
+@keyframes draw {
+    from {
+        stroke-dashoffset: 388.5;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes stroke-color {
+    0%      {stroke: hsl(0, 100%, 17%);}
+    16.667% {stroke: hsl(130, 94%, 14%);}
+    33.333% {stroke: hsl(46, 94%, 49%);}
+    50%     {stroke: hsl(0, 3%, 21%);}
+    66.667% {stroke: hsl(0, 2%, 39%);}
+    83.333% {stroke: hsl(130, 94%, 14%);}
+    100%    {stroke: hsl(0, 0%, 100%);}
+}
+
+.backgroundNLB {
+    font-size: 100px;
+    border-bottom: 1px solid whitesmoke;
+    position: center;
+    horiz-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: rgba(79, 80, 80, 0.62);
+    text-align: center;
+}
+.backgroundWMP {
+    font-size: 50px;
+    position: center;
+    horiz-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: rgba(79, 80, 80, 0.62);
+    text-align: center;
+}
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #383535;
+    margin: 40px 0;
+}
+
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    gap: 8px 13px;
+    background-color: #383535;
+    padding-top: 30px;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #646161;
+    transition: all 0.3s;
+}
+.productionName{
+    text-align: center;
+    font-size: 20px;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    text-align: center;
+    background:transparent;
+    color: white;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-left: 10px solid rgb(56, 53, 53);
+    border-top: 10px solid rgb(56, 53, 53);
+    border-bottom: 30px solid rgb(56, 53, 53);
+    background-color: #b6b6b9;
+    font-family: "Lucida Console", "Courier New", monospace;
+    border-top-left-radius: 30%;
+    border-bottom-right-radius: 30%;
+
+}
+
+#sidebar ul p {
+    color: #000000;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+
+#sidebar ul li a:hover {
+    color: #ffffff;
+    background: transparent;
+}
+
+#sidebar ul li.active>a,
+a[aria-bs-expanded="true"] {
+    color: #383535;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #383535;
+}
+
+ul.CTAs {
+    padding: 20px;
+}
+
+ul.CTAs a {
+    text-align: center;
+    font-size: 0.9em !important;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #sidebarCollapse span {
+        display: none;
+    }
+}
+.textAreas {
+    font-size: 30px;
+    display: inline-list-item;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+ tbody, td, tfoot, th, thead, tr {
+     width: 100%;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 1px;
+    vertical-align: center;
+ }
+
+ #tablePosition {
+     width: 100%;
+ }

@@ -1,0 +1,120 @@
+
+.fieldset {
+  padding: 15px;
+  border:3px solid #b6b6b9;
+  background: #545151;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 10px 10px rgba(0,0,0,.15);
+  display: block;
+}
+
+.moduleInstanceDiv{
+  padding-left: 200px;
+  display: grid;
+  color: white;
+  grid-template-columns:20fr;
+  grid-template-rows: auto;
+
+}
+.moduleDiv{
+  display: grid;
+  color: white;
+  grid-template-columns:10fr 10fr ;
+  grid-template-rows: auto;
+  gap: 2px 20px;
+  min-width: 0;
+  min-height: 0;
+
+}
+.divMain {
+  display: grid;
+  color: white;
+  grid-template-columns: 0.2fr 0.2fr;
+  grid-template-rows: 3rem;
+  gap: 2px 20px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.pNameInput {
+  border-radius: 10px;
+  margin-left: 15px;
+}
+
+.moduleAttInp {
+  border-radius:10px;
+  margin-left: 10px;
+  color:black;
+  box-shadow: 10px 10px rgba(0,0,0,.15);
+  display: block;
+}
+
+.moduleListItem {
+  background: #c7bdbd;
+}
+
+.moduleListItemName {
+  font-family: "Lucida Console","Courier New", monospace;
+}
+.createNew{
+  color:white;
+}
+.moduleInfoPopUp {
+  margin-top: 20px;
+  margin-left:10px;
+  padding: 10px;
+  color:white;
+  box-shadow: 10px 10px rgba(0,0,0,.15);
+  background: #646161;
+  border: 2px solid #ffffff;
+  border-top-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  font-family: "Lucida Console", "Courier New", monospace;
+  width: fit-content;
+  height: fit-content;
+}
+.selectMenu {
+  align-items: center;
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  border: 0;
+  margin-left: 15px;
+  background-position: right 20px center, right bottom, right bottom, right bottom;
+  box-sizing: inherit;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "Lucida Console","Courier New", monospace;
+  background-size: 1px 100%, 20px 22px, 20px 22px, 20px 100%;
+  height: 48px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform;
+  font-size: 18px;
+}
+
+.labels {
+  margin-left: 10px;
+  color:white;
+  align-items: flex-start;
+}
+
+#btnSaveProcess .buttons {
+  position: absolute;
+  right:    0;
+  bottom:   0;
+}

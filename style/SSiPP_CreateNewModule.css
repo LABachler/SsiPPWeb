@@ -1,0 +1,12 @@
+
+.btn-dark {
+    height: 50px;
+    width: 104px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.form-control{
+    margin-top:10px;
+    margin-bottom:10px;
+}
