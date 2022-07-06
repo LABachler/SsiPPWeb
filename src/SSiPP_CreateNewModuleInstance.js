@@ -147,10 +147,7 @@ function createField(type){
                     +"\" line_id=\"" + document.getElementById(paramIds[3]).value +"\"/>"
 
                 xmlModuleInstancePOSTApi(xmlString);
-                /**
-                 * is successfully saved removes the form
-                 */
-                $('#moduleInstanceForm').remove();
+                document.location.reload();
             }
             else
                 alert("Please Fill Out All Of The Fields!");

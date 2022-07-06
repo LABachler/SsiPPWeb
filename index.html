@@ -1,95 +1,77 @@
-
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.88.1">
-    <title>Signin Template · Bootstrap v5.1</title>
+    <title>Sign In</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">
-  <script src="src/SsiPP_SignIn.js"></script>
+    <script src="src/SsiPP_SignIn.js"></script>
     <!-- Bootstrap core CSS -->
-  <link href="style/bootstrap.min.css" rel="stylesheet">
-
+    <link href="style/bootstrap.min.css" rel="stylesheet">
     <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
         }
-      }
+
+        @media (min-width: 768px) {
+        }
     </style>
 
-    
     <!-- Custom styles for this template -->
     <link href="style/signin.css" rel="stylesheet">
     <svg xmlns="http://www.w3.org/2000/svg">
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="2"/>
-        <feComposite in2="SourceGraphic"
-                     operator="out" result="glow" />
-        <feFlood flood-color="white" flood-opacity="0.2" />
-        <feComposite in2="SourceGraphic"
-                     operator="atop" result="light" />
-        <feComposite in="glow" in2="light" />
-      </filter>
-      <pattern id="p" patternUnits="userSpaceOnUse"
-               width="180px" height="120px"
-               patternTransform="scale(1,0.8660254)">
-
-        <g filter="url(#glow)">
-          <g class="wrapper">
-            <path id="hex" pathLength="388.5"
-                  d="M-30,-60 30,-60 60,0
-                         30,60 -30,60 -60,0Z"
-                  transform="scale(0.935)" />
-          </g>
-          <use xlink:href="#hex" x="0" y="+120" />
-          <use xlink:href="#hex" x="+90" y="+60" />
-          <use xlink:href="#hex" x="+180" y="0" />
-          <use xlink:href="#hex" x="+180" y="120" />
-        </g>
-      </pattern>
-      <rect fill="url(#p)" width="100%" height="100%">
-      </rect>
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="2"/>
+            <feComposite in2="SourceGraphic" operator="out" result="glow"/>
+            <feFlood flood-color="white" flood-opacity="0.2"/>
+            <feComposite in2="SourceGraphic" operator="atop" result="light"/>
+            <feComposite in="glow" in2="light"/>
+        </filter>
+        <pattern id="p" patternUnits="userSpaceOnUse" width="180px" height="120px"
+                 patternTransform="scale(1,0.8660254)">
+            <g filter="url(#glow)">
+                <g class="wrapper">
+                    <path id="hex" pathLength="388.5" d="M-30,-60 30,-60 60,0 30,60 -30,60 -60,0Z"
+                          transform="scale(0.935)"/>
+                </g>
+                <use xlink:href="#hex" x="0" y="+120"/>
+                <use xlink:href="#hex" x="+90" y="+60"/>
+                <use xlink:href="#hex" x="+180" y="0"/>
+                <use xlink:href="#hex" x="+180" y="120"/>
+            </g>
+        </pattern>
+        <rect fill="url(#p)" width="100%" height="100%"></rect>
     </svg>
-  </head>
-  <body class="text-center">
+</head>
+<body class="text-center">
 
 <main class="form-signin">
-  <form>
-    <img class="mb-4" src="logo.png" alt="" height="100%" width="100%">
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <form>
+        <img class="mb-4" src="logo.png" alt="" height="100%" width="100%">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
-    <div class="form-floating">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-      <label for="floatingInput">Email address</label>
-    </div>
-    <div class="form-floating">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-      <label for="floatingPassword">Password</label>
-    </div>
+        <div class="form-floating">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+        </div>
 
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit" onclick="validate()">Sign in</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
-  </form>
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit" onclick="validate()">Sign in</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p>
+    </form>
 </main>
-
-    
-  </body>
+</body>
 </html>

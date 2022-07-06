@@ -1,3 +1,4 @@
+
 /**
  * API URL to get all templates of saved processes
  * @type {string}
@@ -69,7 +70,7 @@ let xmlRunningProcess;
 let xmlRunningProcesses;
 
 /**
- * API calls that give the information needed when starting the page
+ * API calls that get all the information needed when starting the page
  */
 
 $.ajax({
@@ -123,7 +124,7 @@ $.ajax({
  * @param {String} id -> id of a running process
  * @return {String} xmlRunningProcess -> currently running process in an API
  * */
-function startRunningProcessAPICall(id){
+function runningProcessAPICall(id){
     $.ajax({
         async: false,
         url: GET_API_URL_RUNNING_PROCESS + "/"+id,
@@ -164,7 +165,7 @@ export function getAllModuleInstances(){
  * @return {String} xmlRunningProcess - currently running process with updated data
  */
 export function getRunningProcess(id){
-    startRunningProcessAPICall(id);
+    runningProcessAPICall(id);
     return xmlRunningProcess;
 }
 /**

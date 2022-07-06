@@ -85,6 +85,7 @@ let processModuleList = [];
  * number of module instances in this process
  */
 let stepNr = 0;
+let stepNumbers = [];
 
 fieldsetMain.className = "fieldset";
 fieldsetMain.id ="createProcessField";
@@ -187,7 +188,7 @@ addButton.addEventListener('click', function () {
         legendModule.className = "labels"
         legendModuleStep.innerHTML = " Step: " + stepNr;
         legendModuleStep.className = "labels"
-
+        stepNumbers.push(stepNr);
         fieldsetModule.appendChild(legendModule);
         fieldsetModule.appendChild(pBreakLine);
         fieldsetModule.appendChild(legendModuleStep);
@@ -206,17 +207,16 @@ addButton.addEventListener('click', function () {
                     spnModuleAttribute = document.createElement("span");
                     lblModuleAttribute = document.createElement("label");
                     lblModuleAttribute.className = "labels"
-                    lblModuleAttribute.id = "labels"+ attrib.value;
+                    lblModuleAttribute.id = "labels"+ attrib.value + stepNr;
                     lblModuleAttribute.innerHTML = attrib.value;
                     spnModuleAttribute.appendChild(lblModuleAttribute);
 
                     if (attrib.name === "name"){
                         inpModuleAttribute = document.createElement("input");
                         inpModuleAttribute.className = "form-control form-control-sm";
-                        inpModuleAttribute.id = "input"+attrib.value;
-                        inpModuleAttribute.type = "number";
-                        inpModuleAttribute.oninput = () => this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');
-                        //spnModuleAttribute.appendChild(inpModuleAttribute);
+                        inpModuleAttribute.id = "input"+attrib.value + stepNr;
+                        inpModuleAttribute.oninput = () => this.value = this.value.replace(/[^0-9.]/g, '')
+                            .replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');
                     }
                     if(attrib.name === "engineering_unit")
                         spnModuleAttribute.appendChild(inpModuleAttribute);
@@ -230,7 +230,7 @@ addButton.addEventListener('click', function () {
          * possible predecessors to current module instance
          */
         let selPrevious = document.createElement("select");
-        selPrevious.id = stepNr.toString();
+        selPrevious.id = "selectPrev" + stepNr.toString();
         stepNr++;
 
         /**
@@ -240,12 +240,14 @@ addButton.addEventListener('click', function () {
         let option = document.createElement("option");
         option.text = "-";
         selPrevious.appendChild(option);
+
         for(let o = 0; o < stepNr - 1; o++){
             option = document.createElement("option");
             option.text = o.toString();
             selPrevious.appendChild(option);
 
         }
+        selPrevious.selectedIndex = 0;
         lblModuleAttribute = document.createElement("label");
         lblModuleAttribute.className = "labels"
         lblModuleAttribute.id = "labelPredecessor"
@@ -269,11 +271,6 @@ addButton.addEventListener('click', function () {
  * that gives the possibility to style it
  */
 let selectWrapper = document.createElement("div");
-/**
- * @type {XPathResult}
- * all module names
- */
-let moduleNames = XMLParser.getAllModuleInstanceNames();
 /**
  * @type {HTMLSelectElement}
  * select element where all module instances
@@ -300,11 +297,16 @@ menuItemCreateNewProcess.addEventListener("click", function() {
     $('.moduleInstanceDiv').hide();
 
     /**
+     * @type {XPathResult}
+     * all module names
+     */
+    let moduleNames = XMLParser.getAllModuleInstanceNames();
+    let module = null;
+    /**
      * @type {HTMLOptionElement}
      * header for module instances select element
      */
     let menuSelHeader = document.createElement("option");
-    let module = null;
 
     menuSelHeader.text = "Choose a process ▼"
     menuSelHeader.hidden = true;
@@ -397,7 +399,7 @@ saveProcessButton.addEventListener('click', function () {
         + "\" default_quantity=\""+ document.getElementById("inpProcessWeight").value
         + "\" scale=\"\">";
 
-
+    let moduleInstanceNr = 0;
     for(let i = 0; i < processModuleList.length; i++){
         /**
          * @type {HTMLElement}
@@ -426,8 +428,9 @@ saveProcessButton.addEventListener('click', function () {
          * parameters of a module instance
          */
         let moduleParams;
-
-        if(isParallel(i).length !== 1){
+        let parallelsNr = isParallel(i).length;
+        console.log(parallelsNr);
+        if(parallelsNr > 1){
             xmlFile = xmlFile + "<parallel>";
             /**
              * array of parallel module instances in a process
@@ -435,7 +438,8 @@ saveProcessButton.addEventListener('click', function () {
              */
             let parallelModules = isParallel(i);
             let parallels = 0;
-            for(parallels = 0; parallels < isParallel(i).length; parallels++){
+
+            for(parallels = 0; parallels < parallelsNr; parallels++){
 
                 moduleInstanceType = XMLParser.getModuleTypeByModuleInstanceName(
                     document.getElementById(parallelModules[parallels]).id).stringValue;
@@ -444,21 +448,24 @@ saveProcessButton.addEventListener('click', function () {
                 while(modInstanceIterator = moduleInstance.iterateNext())
                     moduleInstanceText = modInstanceIterator;
 
-                moduleInstanceText = appendParametersAndReportValues(moduleInstanceText,moduleInstanceType);
+                moduleInstanceText = appendParametersAndReportValues(moduleInstanceText,moduleInstanceType, moduleInstanceNr);
                 moduleInstanceText.appendChild(document.createRange().createContextualFragment(
-                    "<module_instance_report><time_started></time_started><time_finished></time_finished><STATUS></STATUS><COMMAND></COMMAND><MESSAGE></MESSAGE><ERROR></ERROR><E_MSG></E_MSG></module_instance_report>"));
+                    "<module_instance_report><time_started></time_started><time_finished></time_finished>" +
+                    "<STATUS></STATUS><COMMAND></COMMAND><MESSAGE></MESSAGE><ERROR></ERROR><E_MSG></E_MSG></module_instance_report>"));
                 xmlFile = xmlFile + new XMLSerializer().serializeToString(moduleInstanceText);
+                moduleInstanceNr++;
             }
             xmlFile = xmlFile + "</parallel>";
-            i += parallels;
+            i += (parallels-1);
         }
         else{
             moduleInstanceText = moduleInstance.iterateNext();
             moduleParams = XMLParser.getModuleParamsByModuleName(moduleInstanceType);
-            moduleInstanceText = appendParametersAndReportValues(moduleInstanceText,moduleInstanceType);
+            moduleInstanceText = appendParametersAndReportValues(moduleInstanceText,moduleInstanceType, moduleInstanceNr);
             moduleInstanceText.appendChild(document.createRange().createContextualFragment(
                 "<module_instance_report><time_started></time_started><time_finished></time_finished><STATUS></STATUS><COMMAND></COMMAND><MESSAGE></MESSAGE><ERROR></ERROR><E_MSG></E_MSG></module_instance_report>"));
             xmlFile = xmlFile + new XMLSerializer().serializeToString(moduleInstanceText);
+            moduleInstanceNr++;
         }
     }
     xmlFile = xmlFile + "</process>";
@@ -487,16 +494,16 @@ saveProcessButton.addEventListener('click', function () {
  * fills those parameters with inputs from a new process form
  * @param {Node} moduleInstanceText
  * @param {String} moduleInstanceType
+ * @param {Number} moduleInstanceNr
  * @returns {Node} module instance node
  */
-function appendParametersAndReportValues(moduleInstanceText,moduleInstanceType){
+function appendParametersAndReportValues(moduleInstanceText,moduleInstanceType, moduleInstanceNr){
     /**
      * @type {XPathResult}
      * module parameters for a module instance
      */
     let moduleParams = XMLParser.getModuleParamsByModuleName(moduleInstanceType);
     let param = null;
-    //let paramNr = 0;
     /**
      * list of parameters that will be filled a
      * @type {array}
@@ -514,7 +521,7 @@ function appendParametersAndReportValues(moduleInstanceText,moduleInstanceType){
     }
 
     for(let i = 0; i < paramToBeFilled.length; i++){
-        paramToBeFilled[i].textContent = document.getElementById("input" + parameterNames[i]).value;
+        paramToBeFilled[i].textContent = document.getElementById("input" + parameterNames[i]+  moduleInstanceNr).value ;
         moduleInstanceText.appendChild(paramToBeFilled[i]);
     }
     /**
@@ -539,13 +546,18 @@ function isParallel(processStep){
      * list of parallel module instance ids
      * @type {array}
      */
+    console.log(processStep);
     let parallelModuleIds = [];
     for(let i = 0; i < processModuleList.length; i++) {
-        let select = document.getElementById((i).toString());
+        let select = document.getElementById("selectPrev" + (i).toString());
+        console.log(select.selectedIndex);
         if(processStep === select.selectedIndex){
+
+            console.log("parallel index = " + select.selectedIndex)
             parallelModuleIds.push(processModuleList[i]);
         }
     }
+    console.log(parallelModuleIds);
     return parallelModuleIds;
 }
 /**

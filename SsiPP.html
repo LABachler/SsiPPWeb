@@ -7,72 +7,59 @@
 </head>
 <body>
 <!-- imports -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script><link href="style/SiPP_ProcessDefinition.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 
+<link href="style/SiPP_ProcessDefinition.css" rel="stylesheet"/>
 <link href="style/SsiPP_CreateProcess.css" rel="stylesheet"/>
 <link href="style/SsiPP_SavedProcesses.css" rel="stylesheet"/>
-<link href="style/SSiPP_CreateNewmodule.css" rel="stylesheet"/>
+<link href="style/SSiPP_CreateNewModule.css" rel="stylesheet"/>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="vkbeautify.0.99.00.beta.js"></script>
-<script type="module" src = "src/SSiPP_CreateNewModule.js"></script>
-<script type="module" src = "src/SSiPP_CreateProcess.js"></script>
-<script type="module" src = "src/SSiPP_CreateNewModuleInstance.js"></script>
-<script type="module" src = "src/SSiPP_SavedOrRunningProcesses.js"></script>
-<script type="module" src = "src/SsiPP_Controls.js"></script>
-<script type="module" src = "src/SsiPP_HistoricalProcesses.js"></script>
+<script type="module" src="src/SSiPP_CreateNewModule.js"></script>
+<script type="module" src="src/SSiPP_CreateProcess.js"></script>
+<script type="module" src="src/SSiPP_CreateNewModuleInstance.js"></script>
+<script type="module" src="src/SSiPP_SavedOrRunningProcesses.js"></script>
+<script type="module" src="src/SsiPP_Controls.js"></script>
+<script type="module" src="src/SsiPP_HistoricalProcesses.js"></script>
 <svg xmlns="http://www.w3.org/2000/svg">
     <filter id="glow">
         <feGaussianBlur stdDeviation="2"/>
-        <feComposite in2="SourceGraphic"
-                     operator="out" result="glow" />
-        <feFlood flood-color="white" flood-opacity="0.2" />
-        <feComposite in2="SourceGraphic"
-                     operator="atop" result="light" />
-        <feComposite in="glow" in2="light" />
+        <feComposite in2="SourceGraphic" operator="out" result="glow"/>
+        <feFlood flood-color="white" flood-opacity="0.2"/>
+        <feComposite in2="SourceGraphic" operator="atop" result="light"/>
+        <feComposite in="glow" in2="light"/>
     </filter>
-    <pattern id="p" patternUnits="userSpaceOnUse"
-             width="180px" height="120px"
-             patternTransform="scale(1,0.8660254)">
-
+    <pattern id="p" patternUnits="userSpaceOnUse" width="180px" height="120px" patternTransform="scale(1,0.8660254)">
         <g filter="url(#glow)">
             <g class="wrapper">
-                <text x="70" y="64" font-size="24" text-anchor="start">
-                    NLB
-                </text>
-                <path id="hex" pathLength="388.5"
-                      d="M-30,-60 30,-60 60,0
-                         30,60 -30,60 -60,0Z"
+                <text x="70" y="64" font-size="24" text-anchor="start"> NLB</text>
+                <path id="hex" pathLength="388.5" d="M-30,-60 30,-60 60,0 30,60 -30,60 -60,0Z"
                       transform="scale(0.935)"/>
-
             </g>
-            <use xlink:href="#hex" x="0" y="+120" />
-            <use xlink:href="#hex" x="+90" y="+60" />
-            <use xlink:href="#hex" x="+180" y="0" />
-            <use xlink:href="#hex" x="+180" y="120" />
+            <use xlink:href="#hex" x="0" y="+120"/>
+            <use xlink:href="#hex" x="+90" y="+60"/>
+            <use xlink:href="#hex" x="+180" y="0"/>
+            <use xlink:href="#hex" x="+180" y="120"/>
         </g>
     </pattern>
-    <rect fill="url(#p)" width="100%" height="100%">
-
-    </rect>
+    <rect fill="url(#p)" width="100%" height="100%"></rect>
 </svg>
 
 <button class="btn-dark" id="sidebarCollapse">☰</button>
 
 <div class="wrapper" id="wrapper">
     <!-- Sidebar  -->
-
     <nav id="sidebar">
-
-        <div class="sidebar-header">
-            <h3>CONTROLS</h3>
-        </div>
-
+        <div class="sidebar-header"><h3>CONTROLS</h3></div>
         <ul class="list-unstyled components">
             <p class="productionName">Bakery</p>
             <li class="active">
-                <a href="#homeSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle" >Create new</a>
+                <a href="#homeSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Create
+                    new</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
                         <a href="#" id="createProcess" class="createNew">+ Process</a>
@@ -86,12 +73,14 @@
                 </ul>
             </li>
             <li>
-                <a href="#pageSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle" id="savedProcesses">Saved processes</a>
+                <a href="#pageSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle"
+                   id="savedProcesses">Saved processes</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                 </ul>
             </li>
             <li>
-                <a href="#runningProcessesPageSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle" id="nowRunning">Now running</a>
+                <a href="#runningProcessesPageSubmenu" data-bs-toggle="collapse" aria-expanded="false"
+                   class="dropdown-toggle" id="nowRunning">Now running</a>
                 <ul class="collapse list-unstyled" id="runningProcessesPageSubmenu">
                 </ul>
             </li>
@@ -107,9 +96,7 @@
         <p class="backgroundNLB">NLB Solutions</p>
         <p class="backgroundWMP">We make it possible!</p>
     </div>
-    <div id="tablePositionCreateProcess">
-
-</div>
+    <div id="tablePositionCreateProcess"></div>
 
 </div>
 </body>

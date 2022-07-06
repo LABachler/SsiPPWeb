@@ -169,7 +169,8 @@ function createRunningProcessItemListener(name,id){
         }
 
         $('.dataTable').empty();
-        insertRowAndCellWithText(document.getElementsByClassName("dataTable").item(0), '▼ START ▼', 'noDataRow');
+        insertRowAndCellWithText(document.getElementsByClassName("dataTable")
+            .item(0), '▼ START ▼', 'noDataRow');
         processModInstances = XMLParser.getRunningProcessModuleInstances(id);
         appendData(processModInstances,true, false);
     }, 15000);
@@ -246,6 +247,7 @@ export function showData(processName, nowRunning, historical) {
     startProcessButton.innerText = "START";
 
     let runningProcessItems = document.getElementById('runningProcessesPageSubmenu');
+
     for(let children = 0; children < runningProcessItems.children.length; children++){
         if(runningProcessItems.children[children].textContent === processName)
             startProcessButton.disabled = "true";
@@ -279,7 +281,7 @@ export function showData(processName, nowRunning, historical) {
             }
         });
 
-        aItem.addEventListener('click', function (){
+        /*aItem.addEventListener('click', function (){
             let stopProcessButton = createElement('button', "btn-dark");
             stopProcessButton.id="stopButton";
             stopProcessButton.innerText = "STOP";
@@ -303,7 +305,7 @@ export function showData(processName, nowRunning, historical) {
                 document.location.reload();
             });
             createRunningProcessItemListener(aItem.innerText, runProcessID.stringValue);
-        })
+        })*/
         document.location.reload();
 
     });

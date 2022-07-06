@@ -15,9 +15,9 @@ historicalProcesses.addEventListener('click', function(){
     $('#moduleInstanceFrom').hide();
     $('.table').remove();
     $('.moduleInstanceDiv').hide();
+
     let parseNames = XMLParser.getAllHistoricalProcesses();
     let parseIDs = XMLParser.getAllHistoricalProcessesIDs();
-
     let nameIterator = null;
     let iDIterator = null;
     let table = document.createElement("table");

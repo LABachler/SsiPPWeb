@@ -1,12 +1,7 @@
 
 import * as APICalls from './APICalls.js';
-let xPath;
-/**
- *
- * @param text
- * @return {Document}
- */
 
+let xPath;
 /**
  * universal xmlParser
  * returns parsed xml text
@@ -136,7 +131,6 @@ export function getAllHistoricalProcessesFinishedTimesByProcessId(id){
 /**
  * gets Status of historical processes
  * */
-
 export function getHistoricalProcessesById(id){
     xPath = "//process[@id=\""+id+"\"]";
     return evaluateXPATH(xPath,APICalls.getAllHistoricalProcesses());

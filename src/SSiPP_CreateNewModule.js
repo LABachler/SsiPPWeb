@@ -224,7 +224,8 @@ menuItemCreateNewModule.addEventListener('click', function () {
                         console.log(result + "->" + status);
                     }
                 });
-                console.log(xmlModuleString);
+                document.location.reload();
+
             }else alert("You have to fill out all of the fields!");
         });
     });
